@@ -1,0 +1,90 @@
+version: 2
+jobs:
+  app:
+    docker:
+      - image: circleci/node:8.11.2
+        environment:
+          VUE_APP_DOMAIN_DEV: $ATHENA_API_HOST
+          VUE_APP_NAME: Athena
+          VUE_APP_ENV: development
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-yarn-{{ checksum "yarn.lock" }}
+      - run:
+          name: install dependecies
+          command: yarn install
+      - save_cache:
+          key: v1-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: run jest tests
+          command: npm run test:unit
+  build-prod:
+    docker:
+      - image: circleci/node:8.11.2
+        user: root
+        environment:
+          VUE_APP_DOMAIN_PROD: $ATHENA_API_HOST
+          VUE_APP_NAME: Athena
+          VUE_APP_ENV: production
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: install docker
+          command: |
+            VER="18.09.1"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv -f /tmp/docker/* /usr/bin
+      - run:
+          name: install compose
+          command: |
+            VER="1.23.2"
+            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: create .env file for compose
+          command: |
+            echo "VUE_APP_ENV=$VUE_APP_ENV" >> .env
+            echo "VUE_APP_NAME=$VUE_APP_NAME" >> .env
+            echo "VUE_APP_DOMAIN_PROD=$VUE_APP_DOMAIN_PROD" >> .env
+      - run:
+          name: build image and push to registry as prod image
+          command: |
+            docker-compose build
+            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+            docker push ippolab/athena-frontend
+  deploy-prod:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "47:17:34:6e:e2:15:27:19:52:7a:af:bd:93:ce:50:32"
+      - run:
+          name: connect to droplet and update instance
+          command: |
+            ssh $SSH_USER@$SSH_HOST "export ATHENA_FRONT_HOST=$ATHENA_FRONT_HOST && export ATHENA_API_HOST=$ATHENA_API_HOST && cd athena && docker-compose stop front && docker-compose rm --force front && docker-compose pull front && docker-compose up -d"
+workflows:
+  version: 2
+  main:
+    jobs:
+      - app
+      - build-prod:
+          requires:
+            - app
+          filters:
+            branches:
+              only: master
+      - deploy-prod:
+          requires:
+            - build-prod
+          filters:
+            branches:
+              only: master
