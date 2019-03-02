@@ -1,9 +1,19 @@
+.. _yarn: https://yarnpkg.com
+
+.. image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master
+
+.. image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev.svg?style=svg
+    :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev
+
+.. image:: https://img.shields.io/github/license/Naereen/StrapDown.js.svg
+   :target: https://github.com/nikelwolf/Athena-frontend/blob/master/LICENSE
+
+
 Quickstart
 ----------
 
 Your need yarn_ installed on your machine to bootsrap environment
-
-.. _yarn: https://yarnpkg.com
 
 Rename ``.env.example`` to ``.env`` and change values if need.
 
