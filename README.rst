@@ -1,13 +1,25 @@
-.. _yarn: https://yarnpkg.com
-
-.. image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master.svg?style=svg
+.. |frontend_master_build| image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master.svg?style=svg
     :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master
 
-.. image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev.svg?style=svg
+.. |frontend_dev_build| image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev.svg?style=svg
     :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev
+
+.. _yarn: https://yarnpkg.com
 
 .. image:: https://img.shields.io/github/license/Naereen/StrapDown.js.svg
    :target: https://github.com/nikelwolf/Athena-frontend/blob/master/LICENSE
+
+Build status
+------------
+
+
++------------+-------------------------+
+|   BRANCH   | BUILD STATUS            |
++============+=========================+
+| master     | |frontend_master_build| |
++------------+-------------------------+
+| dev        | |frontend_dev_build|    |
++------------+-------------------------+
 
 
 Quickstart
