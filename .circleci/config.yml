@@ -1,10 +1,10 @@
 version: 2
 jobs:
-  app:
+  app-unit:
     docker:
       - image: circleci/node:8.11.2
         environment:
-          VUE_APP_DOMAIN_DEV: $ATHENA_API_HOST
+          VUE_APP_DOMAIN_DEV: api.athena.$ATHENA_BASE_HOSTNAME
           VUE_APP_NAME: Athena
           VUE_APP_ENV: development
     steps:
@@ -21,12 +21,13 @@ jobs:
       - run:
           name: run jest tests
           command: npm run test:unit
+
   build-prod:
     docker:
       - image: circleci/node:8.11.2
         user: root
         environment:
-          VUE_APP_DOMAIN_PROD: $ATHENA_API_HOST
+          VUE_APP_DOMAIN_PROD: api.athena.$ATHENA_BASE_HOSTNAME
           VUE_APP_NAME: Athena
           VUE_APP_ENV: production
     steps:
@@ -70,15 +71,15 @@ jobs:
       - run:
           name: connect to droplet and update instance
           command: |
-            ssh $SSH_USER@$SSH_HOST "export ATHENA_FRONT_HOST=$ATHENA_FRONT_HOST && export ATHENA_API_HOST=$ATHENA_API_HOST && cd athena && docker-compose stop front && docker-compose rm --force front && docker-compose pull front && docker-compose up -d"
+            ssh $SSH_USER@$SSH_HOST "cd athena && export HOSTNAME=$ATHENA_BASE_HOSTNAME && docker-compose stop front && docker-compose rm --force front && docker-compose pull front && docker-compose up -d"
 workflows:
   version: 2
   main:
     jobs:
-      - app
+      - app-unit
       - build-prod:
           requires:
-            - app
+            - app-unit
           filters:
             branches:
               only: master
