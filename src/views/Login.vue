@@ -1,69 +1,64 @@
 <template>
-    <div class="auth-page">
-        <div class="container-page" style="margin-top: 200px;">
-            <div class="row">
-
-                <h1 class="text-xs-center">Вход</h1>
-                <form>
-                    <fieldset class="form-group">
-
-                        <input
-                                class="form-control"
-                                type="text"
-                                placeholder="Студ.билет">
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <input
-                                class="form-control"
-                                type="password"
-                                placeholder="Пароль">
-                    </fieldset>
-                    <v-btn>
-                        Войти
-                    </v-btn>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    <v-content>
+        <v-container class="fluid fill-height">
+            <v-layout class="align-center justify-center">
+                <v-flex class="xs12 md4 sm8">
+                    <v-card class="elevation-10">
+                        <v-toolbar>
+                            <v-toolbar-title>Вход в систему</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+                        <v-card-text>
+                            <v-form @keyup.enter="submit">
+                                <v-text-field
+                                        @keyup.enter="submit"
+                                        label="Номер студенческого"
+                                        outline
+                                        type="text"
+                                        v-model="username">
+                                </v-text-field>
+                                <v-text-field
+                                        @keyup.enter="submit"
+                                        label="Пароль"
+                                        outline
+                                        type="password"
+                                        v-model="password">
+                                </v-text-field>
+                            </v-form>
+                            <div v-if="loginError">
+                                <v-alert :value="loginError" type="error">
+                                    Неправильный номер студенческого билета или пароль
+                                </v-alert>
+                            </div>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn @click.prevent="submit">Войти</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-content>
 </template>
 
-<script>
-    import {Vue, Component} from "vue-property-decorator/lib/vue-property-decorator";
+<script lang="ts">
+    import {Component, Vue} from "vue-property-decorator";
+    import {dispatchLogin} from "@/store/main/actions";
+    import {readLoginError} from "@/store/main/getters";
 
     @Component
     export default class Login extends Vue {
+        public username: string = "";
+        public password: string = "";
 
+        public get loginError() {
+            return readLoginError(this.$store);
+        }
+
+        public submit() {
+            dispatchLogin(this.$store, {username: this.username, password: this.password});
+        }
     }
 </script>
-
-<style scoped>
-    .form-control {
-        background-color: #fff;
-        color: #55595c;
-        padding: .5rem .75rem;
-        margin-bottom: 10px;
-        margin-left: 20px;
-        margin-right: 20px;
-        width: 90%;
-        border-radius: 5px;
-
-    }
-
-    .auth-page {
-        width: 40%;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    .container-page {
-        border-radius: 5px;
-    }
-
-    fieldset {
-        border: cornflowerblue;
-    }
-
-
-</style>
 

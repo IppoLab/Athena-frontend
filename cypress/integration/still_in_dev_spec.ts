@@ -1,8 +1,8 @@
-describe('WIP in home page', () => {
+describe("WIP in home page", () => {
     beforeEach(() => {
-        cy.visit('/');
+        cy.visit("/");
     });
-    it('loads', () => {
-        cy.contains('Still In Development');
+    it("loads", () => {
+        cy.contains("Still In Development");
     });
 });

@@ -1,73 +1,54 @@
 <template>
-    <div class="reg-page">
-        <div class="container-page" style="margin-top: 200px;">
-            <div class="row">
+    <v-content>
+        <v-container class="fluid fill-height">
+            <v-layout class="align-center justify-center">
+                <v-flex class="xs12 md5 sm8">
+                    <v-card>
+                        <v-toolbar>
+                            <v-toolbar-title>Регистрация</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+                        <v-card-text>
+                            <v-form>
+                                <v-text-field
+                                        label="E-mail"
+                                        outline>
+                                </v-text-field>
+                                <v-text-field
+                                        label="Номер Студенческого"
+                                        outline>
 
-                <h1 class="text-xs-center">Регистрация</h1>
-                <form>
-                    <fieldset class="form-group">
+                                </v-text-field>
+                                <v-text-field
+                                        label="Пароль"
+                                        outline>
 
-                        <input
-                                class="form-control"
-                                type="text"
-                                placeholder="Студ.билет">
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <input
-                            class="form-control"
-                            type="email"
-                            placeholder="Email">
-                        <input
-                                class="form-control"
-                                type="password"
-                                placeholder="Password">
-                        <input
-                                class="form-control"
-                                type="password"
-                                placeholder="Password again">
-                    </fieldset>
-                    <v-btn>
-                       Зарегистрироваться
-                    </v-btn>
-                </form>
-            </div>
-        </div>
-    </div>
+                                </v-text-field>
+                                <v-text-field
+                                        label="И ещё раз"
+                                        outline>
+                                </v-text-field>
+                                <v-btn>
+                                    Регистрация
+                                </v-btn>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-content>
 </template>
 
 <script>
-    import { Vue, Component } from "vue-property-decorator/lib/vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator/lib/vue-property-decorator";
 
     @Component
-    export default class Registration extends Vue{
+    export default class Registration extends Vue {
 
     }
 </script>
 
 <style scoped>
-    .form-control{
-        background-color: #fff;
-        color: #55595c;
-        padding: .5rem .75rem;
-        margin-bottom: 10px;
-        margin-left: 20px;
-        margin-right: 20px;
-        width: 90%;
-        border-radius: 5px;
 
-    }
-
-    .reg-page{
-        width: 40%;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    .container-page{
-        border-radius: 5px;
-    }
-
-    fieldset{
-        border: cornflowerblue;
-    }
 </style>
