@@ -3,6 +3,6 @@ describe('WIP in home page', () => {
         cy.visit('/');
     });
     it('loads', () => {
-        cy.contains('WIP');
+        cy.contains('Still In Development');
     });
 });
