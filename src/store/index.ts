@@ -1,16 +1,19 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, {StoreOptions} from 'vuex';
+
+import {mainModule} from './main';
+import {adminModule} from './admin';
+import {State} from './state';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-    state: {
-
+const storeOptions: StoreOptions<State> = {
+    modules: {
+        main: mainModule,
+        admin: adminModule,
     },
-    mutations: {
+};
 
-    },
-    actions: {
+export const store = new Vuex.Store<State>(storeOptions);
 
-    },
-});
+export default store;

@@ -5,7 +5,7 @@ let envApiUrl = '';
 if (env === 'production') {
     envApiUrl = `https://${process.env.VUE_APP_DOMAIN_PROD}`;
 } else {
-    envApiUrl = `http://${process.env.VUE_APP_DOMAIN_DEV}:8000`;
+    envApiUrl = `https://${process.env.VUE_APP_DOMAIN_DEV}`;
 }
 
 export const apiUrl = envApiUrl + '/api';
