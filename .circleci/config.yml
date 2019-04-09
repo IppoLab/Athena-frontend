@@ -9,6 +9,10 @@ jobs:
           VUE_APP_ENV: development
     steps:
       - checkout
+      - run:
+          name: export additional env vars
+          command: |
+            echo "export VUE_APP_DOMAIN_DEV=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
       - restore_cache:
           keys:
             - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
@@ -28,12 +32,15 @@ jobs:
     docker:
       - image: cypress/base:8
         environment:
-          VUE_APP_DOMAIN_DEV: api.athena.$ATHENA_BASE_HOSTNAME
           VUE_APP_NAME: Athena
           VUE_APP_ENV: development
           TERM: xterm
     steps:
       - checkout
+      - run:
+          name: export additional env vars
+          command: |
+            echo "export VUE_APP_DOMAIN_DEV=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
       - restore_cache:
           keys:
             - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
@@ -58,11 +65,14 @@ jobs:
       - image: circleci/node:8.11.2
         user: root
         environment:
-          VUE_APP_DOMAIN_PROD: api.athena.$ATHENA_BASE_HOSTNAME
           VUE_APP_NAME: Athena
           VUE_APP_ENV: production
     steps:
       - checkout
+      - run:
+          name: export additional env vars
+          command: |
+            echo "export VUE_APP_DOMAIN_PROD=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
