@@ -64,13 +64,13 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator/lib/vue-property-decorator";
+    import {Component, Vue} from 'vue-property-decorator';
 
     @Component
     export default class TaskManaging extends Vue {
-        public items: string[] = ["ИКБО-13-18", "ИКБО-03-18", "ИКБО-04-18"];
-        public classes: string[] = ["АСА", "ООП", "РПП", "АиЭВМ"];
-        public tasktp: string[] = ["К/р", "Лаб/р", "Реф", "ВКР", "Практ/р"];
+        public items: string[] = ['ИКБО-13-18', 'ИКБО-03-18', 'ИКБО-04-18'];
+        public classes: string[] = ['АСА', 'ООП', 'РПП', 'АиЭВМ'];
+        public tasktp: string[] = ['К/р', 'Лаб/р', 'Реф', 'ВКР', 'Практ/р'];
         public deadline: string = new Date().toISOString().substr(0, 10);
     }
 </script>

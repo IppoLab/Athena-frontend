@@ -31,27 +31,27 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
+    import {Component, Vue} from 'vue-property-decorator';
 
     @Component
     export default class StudentForm extends Vue {
         public readonly subjects: string[] = [
-            "АСА",
-            "ООП",
-            "РПП",
-            "АиЭВМ",
+            'АСА',
+            'ООП',
+            'РПП',
+            'АиЭВМ',
         ];
 
         public readonly taskTypes: string[] = [
-            "К/р",
-            "Лаб/р",
-            "Реф",
-            "ВКР",
-            "Практ/р",
+            'К/р',
+            'Лаб/р',
+            'Реф',
+            'ВКР',
+            'Практ/р',
         ];
 
-        public selectedSubject: string = "";
-        public selectedType: string = "";
+        public selectedSubject: string = '';
+        public selectedType: string = '';
 
     }
 </script>

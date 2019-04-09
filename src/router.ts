@@ -1,51 +1,44 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "@/views/Home.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 Vue.use(Router);
 
 export default new Router({
-    mode: "history",
+    mode: 'history',
     base: process.env.BASE_URL,
     routes: [
         {
-            path: "",
-            name: "home",
-            component: Home,
+            path: '/',
+            component: () => import('./views/Start.vue'),
+            children: [
+                {
+                    path: '/',
+                    component: () => import('@/views/Home.vue'),
+                },
+                {
+                    path: 'login',
+                    component: () => import('@/views/Login.vue'),
+                },
+                {
+                    path: 'profile',
+                    component: () => import('@/views/Profile.vue'),
+                },
+                {
+                    path: 'admin',
+                    component: () => import('@/views/admin/Admin.vue'),
+                    redirect: 'users/all',
+                    children: [
+                        {
+                            path: 'users/create',
+                            component: () => import('@/views/admin/CreateUser.vue'),
+                        },
+                    ],
+                },
+            ],
         },
         {
-            path: "/login",
-            name: "login",
-            props: true,
-            component: () => import("@/views/Login.vue"),
-        },
-        {
-            path: "/add",
-            name: "tasks",
-            props: true,
-            component: () => import("@/views/TaskManaging.vue"),
-        },
-        {
-            path: "/check",
-            name: "check",
-            props: true,
-            component: () => import("@/views/TaskChecking.vue"),
-        },
-        {
-            path: "/reg",
-            name: "reg",
-            props: true,
-            component: () => import("@/views/Registration.vue"),
-        },
-        {
-            path: "/upload",
-            name: "/upload",
-            component: () => import("@/views/Upload.vue"),
-        },
-        {
-            path: "/about",
-            name: "about",
-            component: () => import("./views/About.vue"),
+            path: '/*',
+            redirect: '/',
         },
     ],
 });

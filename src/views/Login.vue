@@ -12,28 +12,35 @@
                             <v-form @keyup.enter="submit">
                                 <v-text-field
                                         @keyup.enter="submit"
+                                        v-model="username"
                                         label="Номер студенческого"
-                                        outline
-                                        type="text"
-                                        v-model="username">
+                                        :rules="[() => !!username || 'Поле обязательно']"
+                                        required
+                                        type="text">
                                 </v-text-field>
                                 <v-text-field
                                         @keyup.enter="submit"
+                                        v-model="password"
                                         label="Пароль"
-                                        outline
-                                        type="password"
-                                        v-model="password">
+                                        :rules="[() => !!username || 'Поле обязательно']"
+                                        required
+                                        type="password">
                                 </v-text-field>
                             </v-form>
                             <div v-if="loginError">
-                                <v-alert :value="loginError" type="error">
+                                <v-alert :value="loginError" type="error" transition="fade-transition">
                                     Неправильный номер студенческого билета или пароль
+                                </v-alert>
+                            </div>
+                            <div v-if="formError">
+                                <v-alert :value="formError" type="error" transition="fade-transition">
+                                    {{formError}}
                                 </v-alert>
                             </div>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn @click.prevent="submit">Войти</v-btn>
+                            <v-btn @click="submit">Войти</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -43,21 +50,32 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import {dispatchLogin} from "@/store/main/actions";
-    import {readLoginError} from "@/store/main/getters";
+    import {Component, Vue} from 'vue-property-decorator';
+    import {dispatchLogin} from '@/store/main/actions';
+    import {readLoginError} from '@/store/main/getters';
 
     @Component
     export default class Login extends Vue {
-        public username: string = "";
-        public password: string = "";
+        public username: string = '';
+        public password: string = '';
+        public formError: string | boolean = false;
 
         public get loginError() {
             return readLoginError(this.$store);
         }
 
-        public submit() {
-            dispatchLogin(this.$store, {username: this.username, password: this.password});
+        private get fieldsAreValid() {
+            return this.username && this.password;
+        }
+
+        public async submit() {
+            this.formError = false;
+
+            if (!this.fieldsAreValid) {
+                this.formError = 'Заполните обязательные поля';
+            } else {
+                await dispatchLogin(this.$store, {username: this.username, password: this.password});
+            }
         }
     }
 </script>

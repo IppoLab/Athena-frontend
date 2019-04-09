@@ -1,6 +1,6 @@
-import axios from "axios";
-import {apiUrl} from "@/env";
-import {IUserInLogin} from "@/interfaces";
+import axios from 'axios';
+import {apiUrl} from '@/env';
+import {IUserInLogin} from '@/interfaces';
 
 function authHeaders(token: string) {
     return {
@@ -12,6 +12,9 @@ function authHeaders(token: string) {
 
 export const api = {
     loginGetToken: async (user: IUserInLogin) => {
-        return axios.post(`${apiUrl}/login/`, user);
+        return axios.post(`${apiUrl}/auth/login/`, user);
+    },
+    getMe: async (token: string) => {
+        return axios.get(`${apiUrl}/auth/profile/me/`, authHeaders(token));
     },
 };
