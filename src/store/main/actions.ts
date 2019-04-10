@@ -1,5 +1,12 @@
 import {api} from '@/api';
-import {getLocalToken, removeLocalToken, saveLocalToken} from '@/utils';
+import {
+    darkTheme,
+    getLocalTheme,
+    getLocalToken,
+    removeLocalToken,
+    saveLocalTheme,
+    saveLocalToken,
+} from '@/utils';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {ActionContext} from 'vuex';
 import {State} from '@/store/state';
@@ -7,10 +14,12 @@ import {AppNotification, MainState} from '@/store/main/state';
 import {IUserInLogin} from '@/interfaces';
 import {
     commitAddNotification,
+    commitDarkThemeUsage,
     commitRemoveNotification,
     commitSetLoggedIn,
     commitSetLoginError,
-    commitSetToken, commitSetUserProfile,
+    commitSetToken,
+    commitSetUserProfile,
 } from '@/store/main/mutations';
 import router from '@/router';
 import {AxiosError} from 'axios';
@@ -48,6 +57,16 @@ export const actions = {
         } catch (e) {
             await dispatchCheckApiError(context, e);
         }
+    },
+    actionChangeTheme: async (context: MainContext, payload: string) => {
+        commitDarkThemeUsage(context, payload === darkTheme);
+        saveLocalTheme(payload);
+    },
+    actionCheckTheme: async (context: MainContext) => {
+          const userTheme = getLocalTheme();
+          if (userTheme) {
+              commitDarkThemeUsage(context, userTheme === darkTheme);
+          }
     },
     actionCheckLoggedIn: async (context: MainContext) => {
         if (!context.state.isLoggedIn) {
@@ -120,3 +139,5 @@ export const dispatchRouteLogout = dispatch(actions.actionRouteLogout);
 export const dispatchCheckLoggedIn = dispatch(actions.actionCheckLoggedIn);
 export const dispatchCheckApiError = dispatch(actions.actionCheckApiError);
 export const dispatchGetUserProfile = dispatch(actions.actionGetUserProfile);
+export const dispatchChangeTheme = dispatch(actions.actionChangeTheme);
+export const dispatchCheckTheme = dispatch(actions.actionCheckTheme);
