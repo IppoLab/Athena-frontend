@@ -12,18 +12,9 @@ jobs:
           name: export additional env vars
           command: |
             echo "export VUE_APP_DOMAIN_DEV=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
-      - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-            - v2-deps-{{ .Branch }}
-            - v2-deps
       - run:
           name: install dependecies
           command: yarn install --frozen-lockfile
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.cache
       - run:
           name: run jest tests
           command: npm run test:unit
@@ -40,18 +31,9 @@ jobs:
           name: export additional env vars
           command: |
             echo "export VUE_APP_DOMAIN_DEV=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
-      - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-            - v2-deps-{{ .Branch }}
-            - v2-deps
       - run:
           name: install dependecies
           command: yarn install --frozen-lockfile
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          paths:
-            - ~/.cache
       - run:
           name: run cypress tests
           command: |
