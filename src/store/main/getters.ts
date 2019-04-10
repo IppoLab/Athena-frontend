@@ -13,6 +13,7 @@ export const getters = {
     userIsStudent: (state: MainState) => state.userProfile && state.userProfile.roles.includes(studentRoleName),
     userIsTutor: (state: MainState) => state.userProfile && state.userProfile.roles.includes(tutorRoleName),
     userIsTeacher: (state: MainState) => state.userProfile && state.userProfile.roles.includes(teacherRoleName),
+    useDarkTheme: (state: MainState) => state.useDarkTheme,
 };
 
 const {read} = getStoreAccessors<MainState, State>('');
@@ -26,3 +27,4 @@ export const readUserIsAdmin = read(getters.userIsAdmin);
 export const readUserIsStudent = read(getters.userIsStudent);
 export const readUserIsTutor = read(getters.userIsTutor);
 export const readUserIsTeacher = read(getters.userIsTeacher);
+export const readUseDarkTheme = read(getters.useDarkTheme);

@@ -11,6 +11,7 @@ const defaultState: MainState = {
     userProfile: null,
     studentProfile: null,
     teacherProfile: null,
+    useDarkTheme: true,
 };
 
 export const mainModule = {

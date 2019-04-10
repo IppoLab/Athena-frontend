@@ -4,15 +4,14 @@
             <v-layout class="align-center justify-center">
                 <v-flex class="xs12 md4 sm8">
                     <v-card class="elevation-10">
-                        <v-toolbar>
-                            <v-toolbar-title>Профиль</v-toolbar-title>
+                        <v-card-title primary-title>
+                            <div class="headline primary--text">Профиль</div>
                             <v-spacer></v-spacer>
-                        </v-toolbar>
+                        </v-card-title>
                         <v-card-text>
                             <div class="my-4">
                                 <div class="subheading text--lighten-3">
-                                    <span v-if="userIsStudent">Шифр студента</span>
-                                    <span v-else>Логин</span>
+                                    <span>Имя пользователя</span>
                                 </div>
                                 <div class="title primary--text" v-if="userProfile && userProfile.username">
                                     {{userProfile.username}}

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-app dark>
+        <v-app :dark="useDarkTheme">
             <v-content v-if="loggedIn === null">
                 <v-container fill-height>
                     <v-layout align-center justify-center>
@@ -24,6 +24,9 @@
                 <v-toolbar app fixed clipped-left>
                     <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                     <v-toolbar-title>{{applicationName}}</v-toolbar-title>
+                    <v-layout justify-end align-center>
+                        <ThemeSwitcher></ThemeSwitcher>
+                    </v-layout>
                 </v-toolbar>
                 <router-view/>
                 <NotificationManager></NotificationManager>
@@ -39,20 +42,26 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readIsLoggedIn} from '@/store/main/getters';
-    import {dispatchCheckLoggedIn, dispatchLogout} from '@/store/main/actions';
+    import {readIsLoggedIn, readUseDarkTheme} from '@/store/main/getters';
+    import {dispatchCheckLoggedIn, dispatchCheckTheme, dispatchLogout} from '@/store/main/actions';
     import ActionMenu from '@/views/menu/ActionMenu.vue';
     import {appName} from '@/env';
     import NotificationManager from '@/components/NotificationManager.vue';
+    import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 
     @Component({
         components: {
+            ThemeSwitcher,
             NotificationManager,
             ActionMenu,
         },
     })
     export default class App extends Vue {
         public drawer: boolean = false;
+
+        public get useDarkTheme() {
+            return readUseDarkTheme(this.$store);
+        }
 
         public get loggedIn() {
             return readIsLoggedIn(this.$store);
@@ -68,6 +77,7 @@
 
         public async created() {
             await dispatchCheckLoggedIn(this.$store);
+            await dispatchCheckTheme(this.$store);
         }
     }
 </script>
