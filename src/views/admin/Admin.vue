@@ -17,12 +17,12 @@
 
     @Component
     export default class Admin extends Vue {
-        public beforeRouteEnter(to, from, next) {
-            adminRouteGuard(to, from, next);
+        public async beforeRouteEnter(to, from, next) {
+            await adminRouteGuard(to, from, next);
         }
 
-        public beforeRouteUpdate(to, from, next) {
-            adminRouteGuard(to, from, next);
+        public async beforeRouteUpdate(to, from, next) {
+            await adminRouteGuard(to, from, next);
         }
     }
 </script>

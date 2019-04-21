@@ -9,20 +9,36 @@
                     <v-list-tile-title>Администрирование</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile to="/admin/users/create">
+            <v-list-tile to="/admin/users/all">
                 <v-list-tile-action>
                     <v-icon>error</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Создать пользователя</v-list-tile-title>
+                    <v-list-tile-title>Пользователи</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile to="/">
+            <v-list-tile to="/admin/subjects/all">
                 <v-list-tile-action>
                     <v-icon>error</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Управление пользователями</v-list-tile-title>
+                    <v-list-tile-title>Предметы</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile to="/admin/specialities/all">
+                <v-list-tile-action>
+                    <v-icon>error</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Направления</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile to="/admin/groups/all">
+                <v-list-tile-action>
+                    <v-icon>error</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>Группы</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list-group>

@@ -84,6 +84,13 @@ export const actions = {
                     commitSetLoggedIn(context, true);
                     commitSetUserProfile(context, response.data);
                 } catch (error) {
+                    try {
+                        const response = await api.refreshToken(token);
+                        commitSetToken(context, response.data.token);
+                        await dispatchCheckLoggedIn(context);
+                    } catch (e) {
+                        await dispatchRemoveLogin(context);
+                    }
                     await dispatchRemoveLogin(context);
                 }
             } else {
