@@ -7,6 +7,7 @@ export interface AppNotification {
 }
 
 export interface MainState {
+    useDarkTheme: boolean;
     token: string;
     isLoggedIn: boolean | null;
     loginError: boolean;

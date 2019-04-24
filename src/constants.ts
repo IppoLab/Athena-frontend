@@ -9,3 +9,4 @@ export const rolesRus = [
     [teacherRoleName, 'преподаватель'],
     [adminRoleName, 'администратор'],
 ];
+

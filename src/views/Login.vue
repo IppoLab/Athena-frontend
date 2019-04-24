@@ -13,7 +13,7 @@
                                 <v-text-field
                                         @keyup.enter="submit"
                                         v-model="username"
-                                        label="Номер студенческого"
+                                        label="Имя пользователя"
                                         :rules="[() => !!username || 'Поле обязательно']"
                                         required
                                         type="text">

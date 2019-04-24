@@ -22,6 +22,9 @@ export const mutations = {
     setUserProfile: (state: MainState, payload: IUserProfile) => {
         state.userProfile = payload;
     },
+    setDarkThemeUsage: (state: MainState, payload: boolean) => {
+        state.useDarkTheme = payload;
+    },
 };
 
 const {commit} = getStoreAccessors<MainState | any, State>('');
@@ -32,3 +35,4 @@ export const commitSetLoginError = commit(mutations.setLoginError);
 export const commitAddNotification = commit(mutations.addNotification);
 export const commitRemoveNotification = commit(mutations.removeNotification);
 export const commitSetUserProfile = commit(mutations.setUserProfile);
+export const commitDarkThemeUsage = commit(mutations.setDarkThemeUsage);

@@ -1,0 +1,115 @@
+<template>
+    <v-container class="fluid">
+        <v-card class="elevation-10">
+            <v-toolbar>
+                <v-toolbar-title primary-title>Изменение группы</v-toolbar-title>
+                <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text>
+                <template>
+                    <v-form lazy-validation>
+                        <v-text-field
+                                v-model="name"
+                                label="Название группы"
+                                :rules="[() => !!name || 'Поле обязательно']"
+                                required
+                                type="text">
+                        </v-text-field>
+                        <v-combobox
+                                :items="specialities"
+                                v-model="speciality"
+                                clearable
+                                item-text="display"
+                                label="Направление">
+                        </v-combobox>
+                    </v-form>
+                    <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
+                        {{formError}}
+                    </v-alert>
+                </template>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="cancel">Назад</v-btn>
+                <v-btn @click="reset">Очистить</v-btn>
+                <v-btn @click="submit" :disabled="!fieldsAreValid">
+                    Изменить
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-container>
+</template>
+
+<script lang="ts">
+    import {Component, Vue} from 'vue-property-decorator';
+    import {readAdminGroupById, readAdminSpecialities} from '@/store/admin/getters';
+    import {dispatchChangeGroupById, dispatchGetGroups} from '@/store/admin/actions';
+    import {IDispalaySpeciality, ISpeciality} from '@/interfaces';
+
+    @Component
+    export default class EditGroup extends Vue {
+        public name: string = '';
+        public speciality: IDispalaySpeciality | null = null;
+        public formError: string | boolean = false;
+
+        public reset() {
+            this.name = '';
+            this.speciality = null;
+            this.formError = false;
+        }
+
+        public cancel() {
+            this.$router.back();
+        }
+
+        public async mounted() {
+            this.reset();
+
+            await dispatchGetGroups(this.$store);
+            const group = readAdminGroupById(this.$store)(this.$router.currentRoute.params.id);
+
+            if (group) {
+                const speciality = group.speciality!;
+
+                this.name = group.name;
+                this.speciality = {
+                    id: speciality.id,
+                    name: speciality.name,
+                    cipher: speciality.cipher,
+                    display: `${speciality.cipher} ${speciality.name}`,
+                };
+            }
+        }
+
+        public get specialities() {
+            return readAdminSpecialities(this.$store).map((speciality: ISpeciality) => {
+                return {
+                    id: speciality.id,
+                    name: speciality.name,
+                    cipher: speciality.cipher,
+                    display: `${speciality.cipher} ${speciality.name}`,
+                };
+            });
+        }
+
+        public get fieldsAreValid() {
+            return !!this.name;
+        }
+
+        public async submit() {
+            this.formError = false;
+
+            if (!this.fieldsAreValid) {
+                this.formError = 'Проверьте обязательные поля';
+            } else {
+                await dispatchChangeGroupById(this.$store, {
+                    id: this.$router.currentRoute.params.id,
+                    group: {
+                        name: this.name,
+                        speciality: this.speciality!.id,
+                    },
+                });
+            }
+        }
+    }
+</script>

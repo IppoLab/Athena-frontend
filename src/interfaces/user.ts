@@ -31,3 +31,11 @@ export interface IUserInCreate {
     lastName: string;
     roles: string[];
 }
+
+export interface IUserInUpdate {
+    username?: string;
+    firstName?: string;
+    secondName?: string;
+    lastName?: string;
+    roles?: string[];
+}

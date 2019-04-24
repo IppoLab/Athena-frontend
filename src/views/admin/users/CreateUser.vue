@@ -45,8 +45,6 @@
                                 {{rolesFormError }}
                             </v-alert>
                         </v-container>
-                        <v-text-field v-model="studentGroup" v-if="newUserIsStudent" label="Шифр студента"
-                                      :rules="[() => !!studentGroup || 'Поле обязательно для пользователей, являющихся студентами']"></v-text-field>
                         <v-layout align-center>
                             <v-flex>
                                 <v-text-field
@@ -86,7 +84,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {rolesRus, studentRoleName} from '@/constants';
+    import {rolesRus} from '@/constants';
     import {dispatchCreateUser} from '@/store/admin/actions';
 
     @Component
@@ -97,7 +95,6 @@
         public lastName: string = '';
         public password1: string = '';
         public password2: string = '';
-        public studentGroup: string = '';
         public userRoles: string[] = [];
         public formError: string | boolean = false;
         public rolesFormError: string | boolean = false;
@@ -132,14 +129,7 @@
             if (!this.userRoles.length) {
                 check = false;
             }
-            if (this.newUserIsStudent) {
-                check = check && !!this.studentGroup;
-            }
             return check;
-        }
-
-        public get newUserIsStudent() {
-            return this.userRoles.includes(studentRoleName);
         }
 
         public async submit() {
@@ -152,7 +142,7 @@
                     this.rolesFormError = 'У пользователя должен быть хотя бы один тип';
                 }
             } else {
-                dispatchCreateUser(this.$store, {
+                await dispatchCreateUser(this.$store, {
                     username: this.username,
                     password: this.password1,
                     firstName: this.firstName,
