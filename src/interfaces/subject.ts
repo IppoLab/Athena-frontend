@@ -1,5 +1,15 @@
 export interface ISubject {
     id: string;
-    url: string;
     name: string;
+    semester: number;
+}
+
+export interface ISubjectInCreate {
+    name: string;
+    semester: number;
+}
+
+export interface ISubjectInUpdate {
+    name?: string;
+    semester?: number;
 }

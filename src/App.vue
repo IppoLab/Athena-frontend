@@ -24,15 +24,14 @@
                 <v-toolbar app fixed clipped-left>
                     <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                     <v-toolbar-title>{{applicationName}}</v-toolbar-title>
-                    <v-layout justify-end align-center>
-                        <ThemeSwitcher></ThemeSwitcher>
-                    </v-layout>
+                    <v-spacer></v-spacer>
+                    <ThemeSwitcher class="mt-4"></ThemeSwitcher>
                 </v-toolbar>
                 <router-view/>
                 <NotificationManager></NotificationManager>
                 <v-footer app>
                     <v-layout align-end justify-end>
-                        <span class="ma-4">Still In Development</span>
+                        <span class="ma-4" v-if="appInDev">Still In Development</span>
                     </v-layout>
                 </v-footer>
             </v-content>
@@ -45,7 +44,7 @@
     import {readIsLoggedIn, readUseDarkTheme} from '@/store/main/getters';
     import {dispatchCheckLoggedIn, dispatchCheckTheme, dispatchLogout} from '@/store/main/actions';
     import ActionMenu from '@/views/menu/ActionMenu.vue';
-    import {appName} from '@/env';
+    import {appName, env} from '@/env';
     import NotificationManager from '@/components/NotificationManager.vue';
     import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 
@@ -76,8 +75,12 @@
         }
 
         public async created() {
-            await dispatchCheckLoggedIn(this.$store);
             await dispatchCheckTheme(this.$store);
+            await dispatchCheckLoggedIn(this.$store);
+        }
+
+        public get appInDev() {
+            return env !== 'production';
         }
     }
 </script>
