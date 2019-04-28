@@ -4,7 +4,7 @@ export interface ISpeciality {
     cipher: string;
 }
 
-export interface IDispalaySpeciality {
+export interface IDisplaySpeciality {
     id: string;
     name: string;
     cipher: string;

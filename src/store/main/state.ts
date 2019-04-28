@@ -1,4 +1,4 @@
-import {IStudentProfile, ITeacherProfile, IUserProfile} from '@/interfaces';
+import {IAuth, IStudentProfile, ITeacherProfile, IUserProfile} from '@/interfaces';
 
 export interface AppNotification {
     content: string;
@@ -8,7 +8,7 @@ export interface AppNotification {
 
 export interface MainState {
     useDarkTheme: boolean;
-    token: string;
+    auth: IAuth | null;
     isLoggedIn: boolean | null;
     loginError: boolean;
     notifications: AppNotification[];

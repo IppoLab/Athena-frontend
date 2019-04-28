@@ -1,8 +1,7 @@
 import {AdminState} from './state';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {State} from '@/store/state';
-import Admin from '@/views/admin/Admin.vue';
-import get = Reflect.get;
+
 
 const usersGetters = {
     adminUsers: (state: AdminState) => state.users,

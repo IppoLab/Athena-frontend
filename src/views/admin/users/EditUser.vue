@@ -38,13 +38,47 @@
                         </v-text-field>
                         <v-container class="fluid">
                             <v-layout row wrap>
-                                <v-checkbox v-model="userRoles" :label="role[1]" :value=role[0] v-for="role in roles"  :key="role.id"/>
+                                <v-checkbox v-model="userRoles" :label="role[1]" :value=role[0] v-for="role in roles"
+                                            :key="role.id"/>
                             </v-layout>
                             <v-alert :value="rolesFormError" type="error" transition="fade-transition"
                                      v-if="rolesFormError">
                                 {{rolesFormError }}
                             </v-alert>
                         </v-container>
+                        <span v-if="isStudent">
+                            <v-text-field
+                                    v-model="studentCipher"
+                                    label="Шифр"
+                                    :rules="[() => !!studentCipher || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-combobox
+                                    :items="groups"
+                                    v-model="studentGroup"
+                                    clearable
+                                    item-text="name"
+                                    label="Группа">
+                        </v-combobox>
+                        </span>
+                        <span v-if="isTeacher">
+                            <v-combobox
+                                    :items="subjects"
+                                    v-model="teacherSubjects"
+                                    item-text="display"
+                                    chips
+                                    clearable
+                                    label="Предметы"
+                                    multiple>
+                                <template slot="selection" slot-scope="data">
+                                    {{data.item.name}} ({{data.item.semester}} семестр)
+                                </template>
+                                <template slot="item" slot-scope="data">
+                                    {{data.item.name}} ({{data.item.semester}} семестр)
+                                </template>
+                            </v-combobox>
+                        </span>
                     </v-form>
                     <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
                         {{formError}}
@@ -65,28 +99,50 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {IUserProfile} from '@/interfaces';
-    import {readAdminUserById} from '@/store/admin/getters';
-    import {dispatchChangeUserById, dispatchGetUserById, dispatchGetUsers} from '@/store/admin/actions';
-    import {rolesRus} from '@/constants';
+    import {IGroup} from '@/interfaces';
+    import {readAdminGroups, readAdminSubjects, readAdminUserById} from '@/store/admin/getters';
+    import {
+        dispatchChangeUserById,
+        dispatchGetGroups,
+        dispatchGetSubjects,
+        dispatchGetUserById,
+    } from '@/store/admin/actions';
+    import {rolesRus, studentRoleName, teacherRoleName} from '@/constants';
+    import {ISubject} from '@/interfaces/subject';
 
     @Component
     export default class EditUser extends Vue {
         public username: string = '';
+
         public firstName: string = '';
         public secondName: string = '';
         public lastName: string = '';
+
         public userRoles: string[] = [];
+
+        public studentCipher: string = '';
+        public studentGroup: IGroup | null = null;
+
+        public teacherSubjects: ISubject[] = [];
+
         public formError: string | boolean = false;
         public rolesFormError: string | boolean = false;
 
         public reset() {
             this.username = '';
+
             this.firstName = '';
             this.lastName = '';
             this.secondName = '';
-            this.formError = false;
+
             this.userRoles = [];
+
+            this.studentCipher = '';
+            this.studentGroup = null;
+
+            this.teacherSubjects = [];
+
+            this.formError = false;
             this.rolesFormError = false;
         }
 
@@ -101,7 +157,11 @@
         public async mounted() {
             this.reset();
 
-            await dispatchGetUsers(this.$store);
+            await dispatchGetGroups(this.$store);
+            await dispatchGetSubjects(this.$store);
+            await dispatchGetUserById(this.$store, this.$router.currentRoute.params.id);
+
+
             const user = readAdminUserById(this.$store)(this.$router.currentRoute.params.id);
 
             if (user) {
@@ -110,14 +170,59 @@
                 this.secondName = user.secondName;
                 this.lastName = user.lastName;
                 this.userRoles = user.roles;
+
+                if (this.isStudent) {
+                    this.studentCipher = user.studentProfile!.cipher;
+                    this.studentGroup = user.studentProfile!.studentGroup;
+                }
+
+                if (this.isTeacher) {
+                    this.teacherSubjects = user.teacherProfile!.subjects;
+                }
             }
         }
 
 
+        public get groups() {
+            return readAdminGroups(this.$store);
+        }
+
+        public get subjects() {
+            return readAdminSubjects(this.$store);
+        }
+
+        public get isStudent() {
+            return this.userRoles.includes(studentRoleName);
+        }
+
+        public get isTeacher() {
+            return this.userRoles.includes(teacherRoleName);
+        }
+
         public get fieldsAreValid() {
-            let check: boolean = !!this.firstName && !!this.secondName && !!this.lastName;
+            let check: boolean = !!this.username && !!this.firstName && !!this.secondName && !!this.lastName;
             if (!this.userRoles.length) {
                 check = false;
+            }
+            if (this.isStudent) {
+                check = (
+                    check &&
+                    !!this.studentCipher &&
+                    !!this.studentGroup &&
+                    this.groups.findIndex((group: IGroup) => this.studentGroup!.id === group.id) !== -1
+                );
+            }
+            if (this.isTeacher) {
+                const subjects = this.subjects;
+
+                check = (
+                    check &&
+                    !!this.teacherSubjects.length &&
+                    !this.teacherSubjects.filter(
+                        (subject: ISubject) => subjects.findIndex(
+                            (loadedSubject) => subject.id === loadedSubject.id) === -1,
+                    ).length
+                );
             }
             return check;
         }
@@ -140,6 +245,13 @@
                         secondName: this.secondName,
                         lastName: this.lastName,
                         roles: this.userRoles,
+                    },
+                    student: {
+                        cipher: this.studentCipher,
+                        studentGroup: !!this.studentGroup ? this.studentGroup.id : '',
+                    },
+                    teacher: {
+                        subjects: this.teacherSubjects.map((subject: ISubject) => subject.id),
                     },
                 });
             }
