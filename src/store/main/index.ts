@@ -5,13 +5,13 @@ import {MainState} from './state';
 
 const defaultState: MainState = {
     isLoggedIn: null,
-    token: '',
+    auth: null,
     loginError: false,
     notifications: [],
     userProfile: null,
     studentProfile: null,
     teacherProfile: null,
-    useDarkTheme: true,
+    useDarkTheme: false,
 };
 
 export const mainModule = {

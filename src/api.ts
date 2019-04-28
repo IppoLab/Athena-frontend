@@ -3,9 +3,10 @@
 import axios from 'axios';
 import {apiUrl} from '@/env';
 import {
-    IGroupInCreate, IGroupInUpdate,
+    IGroupInCreate,
+    IGroupInUpdate,
     ISpecialityInCreate,
-    ISpecialityInUpdate,
+    ISpecialityInUpdate, IStudentProfileInUpdate, ITeacherProfileInAPI,
     IUserInCreate,
     IUserInLogin,
     IUserInUpdate,
@@ -38,8 +39,11 @@ const authApi = {
     loginGetToken: async (user: IUserInLogin) => {
         return axios.post(`${apiUrl}/auth/login/`, user);
     },
-    refreshToken: async (token: string) => {
-        return axios.post(`${apiUrl}/auth/login/refresh/`, {access: token}, authHeaders(token));
+    verifyToken: async (token: string) => {
+        return axios.post(`${apiUrl}/auth/token/verify/`, {token});
+    },
+    refreshToken: async (refresh: string) => {
+        return axios.post(`${apiUrl}/auth/token/refresh/`, {refresh});
     },
     getMe: async (token: string) => {
         return axios.get(`${apiUrl}/auth/profile/me/`, authHeaders(token));
@@ -58,6 +62,18 @@ const usersApi = {
     },
     changeUserById: async (token: string, userId: string, user: IUserInUpdate) => {
         return axios.put(`${apiUrl}/auth/users/${userId}/`, user, authHeaders(token));
+    },
+    getStudentProfileById: async (token: string, studentId: string) => {
+        return axios.get(`${apiUrl}/auth/students/${studentId}/`, authHeaders(token));
+    },
+    changeStudentProfileById: async (token: string, studentId: string, student: IStudentProfileInUpdate) => {
+        return axios.put(`${apiUrl}/auth/students/${studentId}/`, student, authHeaders(token));
+    },
+    getTeacherProfileById: async (token: string, teacherId: string) => {
+        return axios.get(`${apiUrl}/auth/teachers/${teacherId}/`, authHeaders(token));
+    },
+    changeTeacherProfileById: async (token: string, teacherId: string, teacher: ITeacherProfileInAPI) => {
+        return axios.put(`${apiUrl}/auth/teachers/${teacherId}/`, teacher, authHeaders(token));
     },
 };
 

@@ -44,12 +44,12 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {readAdminGroupById, readAdminSpecialities} from '@/store/admin/getters';
     import {dispatchChangeGroupById, dispatchGetGroups} from '@/store/admin/actions';
-    import {IDispalaySpeciality, ISpeciality} from '@/interfaces';
+    import {IDisplaySpeciality, ISpeciality} from '@/interfaces';
 
     @Component
     export default class EditGroup extends Vue {
         public name: string = '';
-        public speciality: IDispalaySpeciality | null = null;
+        public speciality: IDisplaySpeciality | null = null;
         public formError: string | boolean = false;
 
         public reset() {

@@ -46,7 +46,7 @@ jobs:
       - image: circleci/node:8.11.2
         user: root
         environment:
-          VUE_APP_NAME: Athena
+          VUE_APP_NAME: Афина
           VUE_APP_ENV: production
     steps:
       - checkout

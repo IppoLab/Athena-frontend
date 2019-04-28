@@ -1,3 +1,6 @@
+import {IStudentProfile} from './student';
+import {ITeacherProfile} from './teacher';
+
 export interface IUserInLogin {
     username: string;
     password: string;
@@ -12,15 +15,6 @@ export interface IUserProfile {
     roles: string[];
     studentProfile?: IStudentProfile;
     teacherProfile?: ITeacherProfile;
-}
-
-export interface IStudentProfile {
-    cipher: string;
-    studentGroup: string;
-}
-
-export interface ITeacherProfile {
-    subjects: string[];
 }
 
 export interface IUserInCreate {
@@ -39,3 +33,4 @@ export interface IUserInUpdate {
     lastName?: string;
     roles?: string[];
 }
+
