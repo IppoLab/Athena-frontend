@@ -66,17 +66,11 @@
                             <v-combobox
                                     :items="subjects"
                                     v-model="teacherSubjects"
+                                    label="Предметы"
                                     item-text="display"
                                     chips
                                     clearable
-                                    label="Предметы"
                                     multiple>
-                                <template slot="selection" slot-scope="data">
-                                    {{data.item.name}} ({{data.item.semester}} семестр)
-                                </template>
-                                <template slot="item" slot-scope="data">
-                                    {{data.item.name}} ({{data.item.semester}} семестр)
-                                </template>
                             </v-combobox>
                         </span>
                     </v-form>
@@ -108,7 +102,8 @@
         dispatchGetUserById,
     } from '@/store/admin/actions';
     import {rolesRus, studentRoleName, teacherRoleName} from '@/constants';
-    import {ISubject} from '@/interfaces/subject';
+    import {ISubject, ISubjectInSelect} from '@/interfaces/subject';
+    import {dispatchRouteNotFound} from '@/store/main/actions';
 
     @Component
     export default class EditUser extends Vue {
@@ -123,7 +118,7 @@
         public studentCipher: string = '';
         public studentGroup: IGroup | null = null;
 
-        public teacherSubjects: ISubject[] = [];
+        public teacherSubjects: ISubjectInSelect[] = [];
 
         public formError: string | boolean = false;
         public rolesFormError: string | boolean = false;
@@ -177,8 +172,17 @@
                 }
 
                 if (this.isTeacher) {
-                    this.teacherSubjects = user.teacherProfile!.subjects;
+                    this.teacherSubjects = user.teacherProfile!.subjects.map((subject: ISubject) => {
+                        return {
+                            id: subject.id,
+                            name: subject.name,
+                            semester: subject.semester,
+                            display: `${subject.name} (${subject.semester} семестр)`,
+                        };
+                    });
                 }
+            } else {
+                await dispatchRouteNotFound(this.$store);
             }
         }
 
@@ -188,7 +192,14 @@
         }
 
         public get subjects() {
-            return readAdminSubjects(this.$store);
+            return readAdminSubjects(this.$store).map((subject: ISubject) => {
+                return {
+                    id: subject.id,
+                    semester: subject.semester,
+                    name: subject.name,
+                    display: `${subject.name} (${subject.semester} семестр)`,
+                };
+            });
         }
 
         public get isStudent() {

@@ -43,6 +43,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {readAdminSubjectById} from '@/store/admin/getters';
     import {dispatchChangeSubjectById, dispatchGetSubjects} from '@/store/admin/actions';
+    import {dispatchRouteNotFound} from '@/store/main/actions';
 
     @Component
     export default class EditSubject extends Vue {
@@ -69,6 +70,8 @@
             if (subject) {
                 this.name = subject.name;
                 this.semester = subject.semester;
+            } else {
+                await dispatchRouteNotFound(this.$store);
             }
         }
 

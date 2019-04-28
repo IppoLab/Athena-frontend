@@ -44,6 +44,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import {readAdminSpecialityById} from '@/store/admin/getters';
     import {dispatchChangeSpecialityById, dispatchGetSpecialities} from '@/store/admin/actions';
+    import {dispatchRouteNotFound} from '@/store/main/actions';
 
     @Component
     export default class EditSubject extends Vue {
@@ -70,6 +71,8 @@
             if (speciality) {
                 this.name = speciality.name;
                 this.cipher = speciality.cipher;
+            } else {
+                await dispatchRouteNotFound(this.$store);
             }
         }
 
