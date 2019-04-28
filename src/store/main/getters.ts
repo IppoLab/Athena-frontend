@@ -5,7 +5,7 @@ import {adminRoleName, studentRoleName, teacherRoleName, tutorRoleName} from '@/
 
 export const getters = {
     loginError: (state: MainState) => state.loginError,
-    token: (state: MainState) => state.token,
+    auth: (state: MainState) => state.auth,
     isLoggedIn: (state: MainState) => state.isLoggedIn,
     firstNotification: (state: MainState) => state.notifications.length > 0 && state.notifications[0],
     userProfile: (state: MainState) => state.userProfile,
@@ -19,7 +19,7 @@ export const getters = {
 const {read} = getStoreAccessors<MainState, State>('');
 
 export const readIsLoggedIn = read(getters.isLoggedIn);
-export const readToken = read(getters.token);
+export const readAuth = read(getters.auth);
 export const readLoginError = read(getters.loginError);
 export const readFirstNotification = read(getters.firstNotification);
 export const readUserProfile = read(getters.userProfile);

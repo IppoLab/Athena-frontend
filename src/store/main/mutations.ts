@@ -1,11 +1,11 @@
 import {AppNotification, MainState} from './state';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {State} from '@/store/state';
-import {IUserProfile} from '@/interfaces';
+import {IAuth, IUserProfile} from '@/interfaces';
 
 export const mutations = {
-    setToken: (state: MainState, payload: string) => {
-        state.token = payload;
+    setAuth: (state: MainState, payload: IAuth | null) => {
+        state.auth = payload;
     },
     setLoggedIn: (state: MainState, payload: boolean) => {
         state.isLoggedIn = payload;
@@ -29,7 +29,7 @@ export const mutations = {
 
 const {commit} = getStoreAccessors<MainState | any, State>('');
 
-export const commitSetToken = commit(mutations.setToken);
+export const commitSetAuth = commit(mutations.setAuth);
 export const commitSetLoggedIn = commit(mutations.setLoggedIn);
 export const commitSetLoginError = commit(mutations.setLoginError);
 export const commitAddNotification = commit(mutations.addNotification);

@@ -1,13 +1,27 @@
-const tokenKey = 'token';
+import {IAuth} from '@/interfaces';
+
+const accessKey = 'access';
+const refreshKey = 'refresh';
 const themeKey = 'darkTheme';
 export const darkTheme = 'dark';
 export const lightTheme = 'light';
 
-export const getLocalToken = () => localStorage.getItem(tokenKey);
+export const getLocalAuth = () => {
+    return {
+        access: localStorage.getItem(accessKey),
+        refresh: localStorage.getItem(refreshKey),
+    } as IAuth;
+};
 
-export const saveLocalToken = (token: string) => localStorage.setItem(tokenKey, token);
+export const saveLocalAuth = (auth: IAuth) => {
+    localStorage.setItem(accessKey, auth.access);
+    localStorage.setItem(refreshKey, auth.refresh);
+};
 
-export const removeLocalToken = () => localStorage.removeItem(tokenKey);
+export const removeLocalAuth = () => {
+    localStorage.removeItem(accessKey);
+    localStorage.removeItem(refreshKey);
+};
 
 export const getLocalTheme = () => localStorage.getItem(themeKey);
 

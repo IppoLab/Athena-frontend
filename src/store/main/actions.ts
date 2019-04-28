@@ -1,24 +1,17 @@
 import {api} from '@/api';
-import {
-    darkTheme,
-    getLocalTheme,
-    getLocalToken,
-    removeLocalToken,
-    saveLocalTheme,
-    saveLocalToken,
-} from '@/utils';
+import {darkTheme, getLocalAuth, getLocalTheme, removeLocalAuth, saveLocalAuth, saveLocalTheme} from '@/utils';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {ActionContext} from 'vuex';
 import {State} from '@/store/state';
 import {AppNotification, MainState} from '@/store/main/state';
-import {IUserInLogin} from '@/interfaces';
+import {IAuth, IUserInLogin} from '@/interfaces';
 import {
     commitAddNotification,
     commitDarkThemeUsage,
     commitRemoveNotification,
+    commitSetAuth,
     commitSetLoggedIn,
     commitSetLoginError,
-    commitSetToken,
     commitSetUserProfile,
 } from '@/store/main/mutations';
 import router from '@/router';
@@ -31,10 +24,10 @@ export const actions = {
     actionLogin: async (context: MainContext, payload: IUserInLogin) => {
         try {
             const response = await api.loginGetToken(payload);
-            const token = response.data.token;
-            if (token) {
-                saveLocalToken(token);
-                commitSetToken(context, token);
+            const auth = response.data as IAuth;
+            if (auth) {
+                saveLocalAuth(auth);
+                commitSetAuth(context, auth);
                 commitSetLoggedIn(context, true);
                 commitSetLoginError(context, false);
                 await dispatchGetUserProfile(context);
@@ -50,7 +43,7 @@ export const actions = {
     },
     actionGetUserProfile: async (context: MainContext) => {
         try {
-            const response = await api.getMe(context.state.token);
+            const response = await api.getMe(context.state.auth!.access);
             if (response.data) {
                 commitSetUserProfile(context, response.data);
             }
@@ -63,35 +56,42 @@ export const actions = {
         saveLocalTheme(payload);
     },
     actionCheckTheme: async (context: MainContext) => {
-          const userTheme = getLocalTheme();
-          if (userTheme) {
-              commitDarkThemeUsage(context, userTheme === darkTheme);
-          }
+        const userTheme = getLocalTheme();
+        if (userTheme) {
+            commitDarkThemeUsage(context, userTheme === darkTheme);
+        }
     },
     actionCheckLoggedIn: async (context: MainContext) => {
         if (!context.state.isLoggedIn) {
-            let token = context.state.token;
-            if (!token) {
-                const localToken = getLocalToken();
-                if (localToken) {
-                    commitSetToken(context, localToken);
-                    token = localToken;
+            let auth = context.state.auth;
+            if (!auth) {
+                const localAuth = getLocalAuth();
+                if (localAuth.access) {
+                    commitSetAuth(context, localAuth);
+                    auth = localAuth;
                 }
             }
-            if (token) {
+
+            if (auth) {
                 try {
-                    const response = await api.getMe(token);
-                    commitSetLoggedIn(context, true);
-                    commitSetUserProfile(context, response.data);
-                } catch (error) {
+                    await api.verifyToken(auth.access);
+                } catch (e) {
                     try {
-                        const response = await api.refreshToken(token);
-                        commitSetToken(context, response.data.token);
+                        const response = await api.refreshToken(auth.refresh);
+                        auth = response.data;
+                        commitSetAuth(context, auth!);
                         await dispatchCheckLoggedIn(context);
                     } catch (e) {
-                        await dispatchRemoveLogin(context);
+                        await dispatchCheckApiError(context, e);
                     }
-                    await dispatchRemoveLogin(context);
+                }
+
+                try {
+                    const response = await api.getMe(auth!.access);
+                    commitSetLoggedIn(context, true);
+                    commitSetUserProfile(context, response.data);
+                } catch (e) {
+                    await dispatchCheckApiError(context, e);
                 }
             } else {
                 await dispatchRemoveLogin(context);
@@ -104,8 +104,8 @@ export const actions = {
         }
     },
     actionRemoveLogin: async (context: MainContext) => {
-        removeLocalToken();
-        commitSetToken(context, '');
+        removeLocalAuth();
+        commitSetAuth(context, null);
         commitSetLoggedIn(context, false);
     },
     actionLogout: async (context: MainContext) => {
