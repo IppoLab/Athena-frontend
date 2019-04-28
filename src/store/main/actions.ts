@@ -99,8 +99,16 @@ export const actions = {
         }
     },
     actionCheckApiError: async (context: MainContext, payload: AxiosError) => {
-        if (payload.response!.status === 401) {
-            await dispatchLogout(context);
+        switch (payload.response!.status) {
+            case 400:
+                commitAddNotification(context, {content: 'Проверьте введенные данные', color: 'error'});
+                break;
+            case 401:
+                await dispatchLogout(context);
+                break;
+            case 404:
+                await dispatchRouteNotFound(context);
+                break;
         }
     },
     actionRemoveLogin: async (context: MainContext) => {
@@ -114,6 +122,9 @@ export const actions = {
         if (!readLoginError(context)) {
             commitAddNotification(context, {content: 'Выход произведен успешно', color: 'success'});
         }
+    },
+    actionRouteNotFound: (context: MainContext) => {
+        router.push('/');
     },
     actionRouteLoggedIn: (context: MainContext) => {
         if (router.currentRoute.path === '/login') {
@@ -148,3 +159,4 @@ export const dispatchCheckApiError = dispatch(actions.actionCheckApiError);
 export const dispatchGetUserProfile = dispatch(actions.actionGetUserProfile);
 export const dispatchChangeTheme = dispatch(actions.actionChangeTheme);
 export const dispatchCheckTheme = dispatch(actions.actionCheckTheme);
+export const dispatchRouteNotFound = dispatch(actions.actionRouteNotFound);

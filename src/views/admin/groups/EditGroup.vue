@@ -45,6 +45,7 @@
     import {readAdminGroupById, readAdminSpecialities} from '@/store/admin/getters';
     import {dispatchChangeGroupById, dispatchGetGroups} from '@/store/admin/actions';
     import {IDisplaySpeciality, ISpeciality} from '@/interfaces';
+    import {dispatchRouteNotFound} from '@/store/main/actions';
 
     @Component
     export default class EditGroup extends Vue {
@@ -78,6 +79,8 @@
                     cipher: speciality.cipher,
                     display: `${speciality.cipher} ${speciality.name}`,
                 };
+            } else {
+                await dispatchRouteNotFound(this.$store);
             }
         }
 
@@ -93,7 +96,7 @@
         }
 
         public get fieldsAreValid() {
-            return !!this.name;
+            return !!this.name && !!this.speciality;
         }
 
         public async submit() {

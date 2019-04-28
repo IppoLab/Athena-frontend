@@ -4,6 +4,10 @@ export interface ISubject {
     semester: number;
 }
 
+export interface ISubjectInSelect extends ISubject {
+    display: string | null;
+}
+
 export interface ISubjectInCreate {
     name: string;
     semester: number;

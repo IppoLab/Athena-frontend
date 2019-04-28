@@ -66,16 +66,11 @@
                             <v-combobox
                                     :items="subjects"
                                     v-model="teacherSubjects"
+                                    item-text="display"
                                     chips
                                     clearable
                                     label="Предметы"
                                     multiple>
-                                <template slot="selection" slot-scope="data">
-                                    {{data.item.name}} ({{data.item.semester}} семестр)
-                                </template>
-                                <template slot="item" slot-scope="data">
-                                    {{data.item.name}} ({{data.item.semester}} семестр)
-                                </template>
                             </v-combobox>
                         </span>
                         <v-layout align-center>
@@ -184,7 +179,14 @@
         }
 
         public get subjects() {
-            return readAdminSubjects(this.$store);
+            return readAdminSubjects(this.$store).map((subject: ISubject) => {
+                return {
+                    id: subject.id,
+                    semester: subject.semester,
+                    name: subject.name,
+                    display: `${subject.name} (${subject.semester} семестр)`,
+                };
+            });
         }
 
         public get fieldsAreValid() {
