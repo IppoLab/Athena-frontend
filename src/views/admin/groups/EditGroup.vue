@@ -1,5 +1,17 @@
 <template>
-    <v-container class="fluid">
+    <v-content v-if="!loaded">
+        <v-container fill-height>
+            <v-layout align-center justify-center>
+                <v-flex>
+                    <div class="text-xs-center">
+                        <div class="headline my-5">Загрузка...</div>
+                        <v-progress-circular size="100" indeterminate color="primary"></v-progress-circular>
+                    </div>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-content>
+    <v-container v-else class="fluid">
         <v-card class="elevation-10">
             <v-toolbar>
                 <v-toolbar-title primary-title>Изменение группы</v-toolbar-title>
@@ -52,6 +64,7 @@
         public name: string = '';
         public speciality: IDisplaySpeciality | null = null;
         public formError: string | boolean = false;
+        public loaded: boolean = false;
 
         public reset() {
             this.name = '';
@@ -82,6 +95,8 @@
             } else {
                 await dispatchRouteNotFound(this.$store);
             }
+
+            this.loaded = true;
         }
 
         public get specialities() {
