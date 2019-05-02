@@ -23,12 +23,12 @@
 
     @Component
     export default class Start extends Vue {
-        public beforeRouteEnter(to, from, next) {
-            startRouteGuard(to, from, next);
+        public async beforeRouteEnter(to, from, next) {
+            await startRouteGuard(to, from, next);
         }
 
-        public beforeRouteUpdate(to, from, next) {
-            startRouteGuard(to, from, next);
+        public async beforeRouteUpdate(to, from, next) {
+            await startRouteGuard(to, from, next);
         }
     }
 </script>

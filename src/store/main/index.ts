@@ -4,13 +4,15 @@ import {actions} from './actions';
 import {MainState} from './state';
 
 const defaultState: MainState = {
+    accessToken: '',
+    refreshToken: '',
+
     isLoggedIn: null,
-    auth: null,
     loginError: false,
-    notifications: [],
+
     userProfile: null,
-    studentProfile: null,
-    teacherProfile: null,
+
+    notifications: [],
     useDarkTheme: false,
 };
 

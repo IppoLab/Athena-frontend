@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {AppNotification} from '@/store/main/state';
+    import {IAppNotification} from '@/interfaces';
     import {commitRemoveNotification} from '@/store/main/mutations';
     import {readFirstNotification} from '@/store/main/getters';
     import {dispatchRemoveNotification} from '@/store/main/actions';
@@ -19,7 +19,7 @@
         public show: boolean = false;
         public text: string = '';
         public showProgress: boolean = false;
-        public currentNotification: AppNotification | false = false;
+        public currentNotification: IAppNotification | false = false;
 
         public async hide() {
             this.show = false;
@@ -41,7 +41,7 @@
             return readFirstNotification(this.$store);
         }
 
-        public async setNotification(notification: AppNotification | false) {
+        public async setNotification(notification: IAppNotification | false) {
             if (this.show) {
                 await this.hide();
             }
@@ -56,8 +56,8 @@
 
         @Watch('firstNotification')
         public async onNotificationChange(
-            newNotification: AppNotification | false,
-            oldNotification: AppNotification | false,
+            newNotification: IAppNotification | false,
+            oldNotification: IAppNotification | false,
         ) {
             if (newNotification !== this.currentNotification) {
                 await this.setNotification(newNotification);

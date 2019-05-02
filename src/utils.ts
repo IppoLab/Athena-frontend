@@ -2,27 +2,27 @@ import {IAuth} from '@/interfaces';
 
 const accessKey = 'access';
 const refreshKey = 'refresh';
-const themeKey = 'darkTheme';
-export const darkTheme = 'dark';
-export const lightTheme = 'light';
+const darkThemeKey = 'dark';
 
-export const getLocalAuth = () => {
+export const getLocalTokens = () => {
     return {
-        access: localStorage.getItem(accessKey),
-        refresh: localStorage.getItem(refreshKey),
-    } as IAuth;
+        access: localStorage.getItem(accessKey) || '',
+        refresh: localStorage.getItem(refreshKey) || '',
+    };
 };
 
-export const saveLocalAuth = (auth: IAuth) => {
+export const saveLocalTokens = (auth: IAuth) => {
     localStorage.setItem(accessKey, auth.access);
     localStorage.setItem(refreshKey, auth.refresh);
 };
 
-export const removeLocalAuth = () => {
+export const removeLocalTokens = () => {
     localStorage.removeItem(accessKey);
     localStorage.removeItem(refreshKey);
 };
 
-export const getLocalTheme = () => localStorage.getItem(themeKey);
+export const getLocalDarkThemeUsage = () => JSON.parse(localStorage.getItem(darkThemeKey) || 'false') === true;
 
-export const saveLocalTheme = (theme: string) => localStorage.setItem(themeKey, theme);
+export const saveLocalDarkThemeUsage = (useDarkTheme: boolean) => {
+    localStorage.setItem(darkThemeKey, JSON.stringify(useDarkTheme));
+};

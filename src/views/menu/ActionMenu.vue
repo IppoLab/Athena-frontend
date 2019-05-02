@@ -26,10 +26,10 @@
                 <v-list-tile-title>Профиль</v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
-        <AdminMenu v-if="userIsAdmin"/>
-        <StudentMenu v-if="userIsStudent"/>
-        <TutorMenu v-if="userIsTutor"/>
-        <TeacherMenu v-if="userIsTeacher"/>
+        <AdminMenu v-if="isAdmin"/>
+        <StudentMenu v-if="isStudent"/>
+        <TutorMenu v-if="iIsTutor"/>
+        <TeacherMenu v-if="isTeacher"/>
         <v-list-tile @click.prevent="logout">
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
@@ -73,19 +73,19 @@
             await dispatchLogout(this.$store);
         }
 
-        get userIsAdmin() {
+        get isAdmin() {
             return readUserIsAdmin(this.$store);
         }
 
-        get userIsStudent() {
+        get isStudent() {
             return readUserIsStudent(this.$store);
         }
 
-        get userIsTutor() {
+        get iIsTutor() {
             return readUserIsTutor(this.$store);
         }
 
-        get userIsTeacher() {
+        get isTeacher() {
             return readUserIsTeacher(this.$store);
         }
     }

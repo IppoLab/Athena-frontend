@@ -6,8 +6,7 @@
 
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {dispatchChangeTheme, dispatchCheckTheme} from '@/store/main/actions';
-    import {darkTheme, lightTheme} from '@/utils';
+    import {dispatchChangeDarkThemeUsage, dispatchCheckDarkThemeUsage} from '@/store/main/actions';
     import {readUseDarkTheme} from '@/store/main/getters';
 
     @Component
@@ -16,16 +15,12 @@
 
         @Watch('useDarkTheme')
         public async onPropertyChanged(value: boolean, oldValue: boolean) {
-            await dispatchChangeTheme(this.$store, value ? darkTheme : lightTheme);
+            await dispatchChangeDarkThemeUsage(this.$store, value);
         }
 
         public async created() {
-            await dispatchCheckTheme(this.$store);
+            await dispatchCheckDarkThemeUsage(this.$store);
             this.useDarkTheme = readUseDarkTheme(this.$store);
         }
     }
 </script>
-
-<style scoped>
-
-</style>

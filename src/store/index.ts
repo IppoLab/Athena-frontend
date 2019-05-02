@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex, {StoreOptions} from 'vuex';
+import Vuex, {ActionContext, StoreOptions} from 'vuex';
 
 import {mainModule} from './main';
 import {adminModule} from './admin';

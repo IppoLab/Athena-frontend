@@ -1,8 +1,8 @@
-import {AdminState} from '@/store/admin/state';
 import {IGroup, ISpeciality, IUserProfile} from '@/interfaces';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {State} from '@/store/state';
 import {ISubject} from '@/interfaces/subject';
+import {AdminState} from '@/store/admin/state';
 
 const usersMutations = {
     setUsers: (state: AdminState, payload: IUserProfile[]) => {

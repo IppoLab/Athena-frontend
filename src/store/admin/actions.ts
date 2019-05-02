@@ -1,7 +1,5 @@
 import {getStoreAccessors} from 'typesafe-vuex';
-import {AdminState} from '@/store/admin/state';
 import {State} from '@/store/state';
-import {ActionContext} from 'vuex';
 import {commitAddNotification, commitRemoveNotification} from '@/store/main/mutations';
 import {dispatchCheckApiError} from '@/store/main/actions';
 import {
@@ -32,12 +30,15 @@ import router from '@/router';
 import {ISubjectInCreate, ISubjectInUpdate} from '@/interfaces/subject';
 import {readAdminGroupById, readAdminSpecialityById, readAdminSubjectById} from '@/store/admin/getters';
 import {studentRoleName, teacherRoleName} from '@/constants';
+import {readAccessToken} from '@/store/main/getters';
+import {ActionContext} from 'vuex';
+import {AdminState} from '@/store/admin/state';
 
-type MainContext = ActionContext<AdminState, State>;
+type AdminContext = ActionContext<AdminState | any, State>;
 
 const usersActions = {
     actionCreateUser: async (
-        context: MainContext,
+        context: AdminContext,
         payload: {
             user: IUserInCreate,
             student?: IStudentProfileInUpdate,
@@ -45,7 +46,7 @@ const usersActions = {
         },
     ) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Создание пользователя', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -77,9 +78,9 @@ const usersActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionGetUserById: async (context: MainContext, payload: string) => {
+    actionGetUserById: async (context: AdminContext, payload: string) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const response = await api.getUserById(token, payload);
             const user = response.data as IUserProfile;
@@ -111,9 +112,9 @@ const usersActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionGetUsers: async (context: MainContext) => {
+    actionGetUsers: async (context: AdminContext) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const usersResponse = await api.getUsers(token);
             if (usersResponse) {
@@ -123,11 +124,11 @@ const usersActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionRouteUserEdit: async (context: MainContext, payload: string) => {
+    actionRouteUserEdit: async (context: AdminContext, payload: string) => {
         router.push({name: 'admin-users-edit', params: {id: payload}});
     },
     actionChangeUserById: async (
-        context: MainContext,
+        context: AdminContext,
         payload: {
             id: string,
             user: IUserInUpdate,
@@ -135,7 +136,7 @@ const usersActions = {
             teacher?: ITeacherProfileInAPI,
         }) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Изменение пользователя', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -172,9 +173,9 @@ const usersActions = {
 };
 
 const subjectsActions = {
-    actionCreateSubject: async (context: MainContext, payload: ISubjectInCreate) => {
+    actionCreateSubject: async (context: AdminContext, payload: ISubjectInCreate) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Создание предмета', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -190,12 +191,12 @@ const subjectsActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionRouteSubjectEdit: async (context: MainContext, payload: string) => {
+    actionRouteSubjectEdit: async (context: AdminContext, payload: string) => {
         router.push({name: 'admin-subjects-edit', params: {id: payload}});
     },
-    actionGetSubjects: async (context: MainContext) => {
+    actionGetSubjects: async (context: AdminContext) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const response = await api.getSubjects(token);
             if (response) {
@@ -205,9 +206,9 @@ const subjectsActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionGetSubjectById: async (context: MainContext, payload: string) => {
+    actionGetSubjectById: async (context: AdminContext, payload: string) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const response = await api.getSubjectById(token, payload);
             commitSetSubject(context, response.data);
@@ -215,9 +216,9 @@ const subjectsActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionChangeSubjectById: async (context: MainContext, payload: { id: string, subject: ISubjectInUpdate }) => {
+    actionChangeSubjectById: async (context: AdminContext, payload: { id: string, subject: ISubjectInUpdate }) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Изменение предмета', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -236,9 +237,9 @@ const subjectsActions = {
 };
 
 const specialitiesActions = {
-    actionGetSpecialities: async (context: MainContext) => {
+    actionGetSpecialities: async (context: AdminContext) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const response = await api.getSpecialities(token);
             if (response) {
@@ -248,9 +249,9 @@ const specialitiesActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionCreateSpeciality: async (context: MainContext, payload: ISpecialityInCreate) => {
+    actionCreateSpeciality: async (context: AdminContext, payload: ISpecialityInCreate) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Создание направления', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -266,15 +267,15 @@ const specialitiesActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionRouteEditSpeciality: async (context: MainContext, payload: string) => {
+    actionRouteEditSpeciality: async (context: AdminContext, payload: string) => {
         router.push({name: 'admin-specialities-edit', params: {id: payload}});
     },
     actionChangeSpecialityById: async (
-        context: MainContext,
+        context: AdminContext,
         payload: { id: string, speciality: ISpecialityInUpdate },
     ) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Изменение направления', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -297,9 +298,9 @@ const specialitiesActions = {
 };
 
 const groupsActions = {
-    actionGetGroups: async (context: MainContext) => {
+    actionGetGroups: async (context: AdminContext) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const response = await api.getGroups(token);
             if (response) {
@@ -319,9 +320,9 @@ const groupsActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionCreateGroup: async (context: MainContext, payload: IGroupInCreate) => {
+    actionCreateGroup: async (context: AdminContext, payload: IGroupInCreate) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Создание группы', showProgress: true};
             commitAddNotification(context, loadingNotification);
@@ -342,15 +343,15 @@ const groupsActions = {
             await dispatchCheckApiError(context, e);
         }
     },
-    actionRouteEditGroup: async (context: MainContext, payload: string) => {
+    actionRouteEditGroup: async (context: AdminContext, payload: string) => {
         router.push({name: 'admin-groups-edit', params: {id: payload}});
     },
     actionChangeGroupById: async (
-        context: MainContext,
+        context: AdminContext,
         payload: { id: string, group: IGroupInUpdate },
     ) => {
         try {
-            const token = context.rootState.main.auth!.access;
+            const token = readAccessToken(context);
 
             const loadingNotification = {content: 'Изменение группы', showProgress: true};
             commitAddNotification(context, loadingNotification);

@@ -1,64 +1,53 @@
 <template>
-    <v-content v-if="!loaded">
-        <v-container fill-height>
-            <v-layout align-center justify-center>
-                <v-flex>
-                    <div class="text-xs-center">
-                        <div class="headline my-5">Загрузка...</div>
-                        <v-progress-circular size="100" indeterminate color="primary"></v-progress-circular>
-                    </div>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-content>
-    <v-container v-else class="fluid">
-        <v-card class="elevation-10">
-            <v-toolbar>
-                <v-toolbar-title primary-title>Изменение пользователя</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            <v-card-text>
-                <template>
-                    <v-form lazy-validation>
-                        <v-text-field
-                                v-model="username"
-                                label="Имя пользователя"
-                                :rules="[() => !!username || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-text-field
-                                v-model="secondName"
-                                label="Фамилия"
-                                :rules="[() => !!secondName || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-text-field
-                                v-model="firstName"
-                                label="Имя"
-                                :rules="[() => !!firstName || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-text-field
-                                v-model="lastName"
-                                label="Отчество"
-                                :rules="[() => !!lastName || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-container class="fluid">
-                            <v-layout row wrap>
-                                <v-checkbox v-model="userRoles" :label="role[1]" :value=role[0] v-for="role in roles"
-                                            :key="role.id"/>
-                            </v-layout>
-                            <v-alert :value="rolesFormError" type="error" transition="fade-transition"
-                                     v-if="rolesFormError">
-                                {{rolesFormError }}
-                            </v-alert>
-                        </v-container>
-                        <span v-if="isStudent">
+    <Loader :loading="!loaded">
+        <v-container slot="content" class="fluid">
+            <v-card class="elevation-10">
+                <v-toolbar>
+                    <v-toolbar-title primary-title>Изменение пользователя</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                    <template>
+                        <v-form lazy-validation>
+                            <v-text-field
+                                    v-model="username"
+                                    label="Имя пользователя"
+                                    :rules="[() => !!username || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-text-field
+                                    v-model="secondName"
+                                    label="Фамилия"
+                                    :rules="[() => !!secondName || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-text-field
+                                    v-model="firstName"
+                                    label="Имя"
+                                    :rules="[() => !!firstName || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-text-field
+                                    v-model="lastName"
+                                    label="Отчество"
+                                    :rules="[() => !!lastName || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-container class="fluid">
+                                <v-layout row wrap>
+                                    <v-checkbox v-model="userRoles" :label="role[1]" :value=role[0] v-for="role in roles"
+                                                :key="role.id"/>
+                                </v-layout>
+                                <v-alert :value="rolesFormError" type="error" transition="fade-transition"
+                                         v-if="rolesFormError">
+                                    {{rolesFormError }}
+                                </v-alert>
+                            </v-container>
+                            <span v-if="isStudent">
                             <v-text-field
                                     v-model="studentCipher"
                                     label="Шифр"
@@ -74,7 +63,7 @@
                                     label="Группа">
                         </v-combobox>
                         </span>
-                        <span v-if="isTeacher">
+                            <span v-if="isTeacher">
                             <v-combobox
                                     :items="subjects"
                                     v-model="teacherSubjects"
@@ -85,22 +74,29 @@
                                     multiple>
                             </v-combobox>
                         </span>
-                    </v-form>
-                    <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
-                        {{formError}}
-                    </v-alert>
-                </template>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="cancel">Назад</v-btn>
-                <v-btn @click="reset">Очистить</v-btn>
-                <v-btn @click="submit" :disabled="!fieldsAreValid">
-                    Изменить
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-container>
+                        </v-form>
+                        <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
+                            {{formError}}
+                        </v-alert>
+                    </template>
+                </v-card-text>
+                <v-card-actions>
+                    <v-layout row wrap>
+                        <v-btn :disabled="true" class="my-1">Сбросить пароль</v-btn>
+                        <v-btn :disabled="true" class="my-1">
+                            Заблокировать
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="cancel" class="my-1">Назад</v-btn>
+                        <v-btn @click="reset" class="my-1">Очистить</v-btn>
+                        <v-btn @click="submit" :disabled="!fieldsAreValid" class="my-1">
+                            Изменить
+                        </v-btn>
+                    </v-layout>
+                </v-card-actions>
+            </v-card>
+        </v-container>
+    </Loader>
 </template>
 
 <script lang="ts">
@@ -116,8 +112,10 @@
     import {rolesRus, studentRoleName, teacherRoleName} from '@/constants';
     import {ISubject, ISubjectInSelect} from '@/interfaces/subject';
     import {dispatchRouteNotFound} from '@/store/main/actions';
-
-    @Component
+    import Loader from '@/components/Loader.vue';
+    @Component({
+        components: {Loader},
+    })
     export default class EditUser extends Vue {
         public username: string = '';
 

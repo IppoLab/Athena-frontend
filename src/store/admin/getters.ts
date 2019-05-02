@@ -1,6 +1,6 @@
-import {AdminState} from './state';
 import {getStoreAccessors} from 'typesafe-vuex';
 import {State} from '@/store/state';
+import {AdminState} from '@/store/admin/state';
 
 
 const usersGetters = {
