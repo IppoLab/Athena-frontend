@@ -112,11 +112,14 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {rolesRus, studentRoleName, teacherRoleName} from '@/constants';
-    import {dispatchCreateUser, dispatchGetGroups, dispatchGetSubjects} from '@/store/admin/actions';
-    import {IGroup} from '@/interfaces';
-    import {readAdminGroups, readAdminSubjects} from '@/store/admin/getters';
-    import {ISubject} from '@/interfaces/subject';
+    import {rolesRus, studentRoleName, teacherRoleName} from '@/configs/constants';
+    import {dispatchGetSubjects} from '@/store/subjects/actions';
+    import {dispatchCreateUser} from '@/store/users/actions';
+    import {dispatchGetGroups} from '@/store/groups/actions';
+    import {IGroup} from '@/models';
+    import {readGroups} from '@/store/groups/getters';
+    import {readSubjects} from '@/store/subjects/getters';
+    import {ISubject} from '@/models/subjects';
 
     @Component
     export default class CreateUser extends Vue {
@@ -175,11 +178,11 @@
         }
 
         public get groups() {
-            return readAdminGroups(this.$store);
+            return readGroups(this.$store);
         }
 
         public get subjects() {
-            return readAdminSubjects(this.$store).map((subject: ISubject) => {
+            return readSubjects(this.$store).map((subject: ISubject) => {
                 return {
                     id: subject.id,
                     semester: subject.semester,

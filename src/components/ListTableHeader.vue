@@ -7,7 +7,7 @@
                 single-line
                 hide-details
         ></v-text-field>
-        <v-btn color="primary" :to="createLink">Создать</v-btn>
+        <v-btn v-if="buttonLink" color="primary" :to="buttonLink">Создать</v-btn>
     </v-toolbar>
 </template>
 
@@ -16,8 +16,8 @@
 
     @Component
     export default class ListTableHeader extends Vue {
-        @Prop(String) public createLink: string | undefined;
-        @Prop({default: ''}) public search: string = '';
+        @Prop({default: ''}) public buttonLink!: string;
+        @Prop({default: ''}) public search!: string;
 
         public get searchText() {
             return this.search;

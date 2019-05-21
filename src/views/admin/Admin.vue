@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readUserIsAdmin} from '@/store/main/getters';
+    import {readUserIsAdmin} from '@/store/auth/getters';
     import store from '@/store';
 
     const adminRouteGuard = async (to, from, next) => {

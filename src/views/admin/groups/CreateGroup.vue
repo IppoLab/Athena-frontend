@@ -42,9 +42,11 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {dispatchCreateGroup, dispatchGetSpecialities} from '@/store/admin/actions';
-    import {ISpeciality} from '@/interfaces';
-    import {readAdminSpecialities} from '@/store/admin/getters';
+
+    import {ISpeciality} from '@/models';
+    import {dispatchCreateGroup} from '@/store/groups/actions';
+    import {dispatchGetSpecialities} from '@/store/specialities/actions';
+    import {readSpecialities} from '@/store/specialities/getters';
 
     @Component
     export default class CreateGroup extends Vue {
@@ -72,7 +74,7 @@
         }
 
         public get specialities() {
-            return readAdminSpecialities(this.$store).map((speciality: ISpeciality) => {
+            return readSpecialities(this.$store).map((speciality: ISpeciality) => {
                     return {
                         id: speciality.id,
                         name: speciality.name,

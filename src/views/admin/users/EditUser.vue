@@ -101,17 +101,19 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {IGroup} from '@/interfaces';
-    import {readAdminGroups, readAdminSubjects, readAdminUserById} from '@/store/admin/getters';
+    import {IGroup} from '@/models';
+    import {readSubjects} from '@/store/subjects/getters';
+    import {readGroups} from '@/store/groups/getters';
+    import {readUserProfileById} from '@/store/users/getters';
     import {
         dispatchChangeUserById,
-        dispatchGetGroups,
-        dispatchGetSubjects,
         dispatchGetUserById,
-    } from '@/store/admin/actions';
-    import {rolesRus, studentRoleName, teacherRoleName} from '@/constants';
-    import {ISubject, ISubjectInSelect} from '@/interfaces/subject';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+    } from '@/store/users/actions';
+    import {dispatchGetGroups} from '@/store/groups/actions';
+    import {dispatchGetSubjects} from '@/store/subjects/actions';
+    import {rolesRus, studentRoleName, teacherRoleName} from '@/configs/constants';
+    import {ISubject, ISubjectInSelect} from '@/models/subjects';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
     import Loader from '@/components/Loader.vue';
     @Component({
         components: {Loader},
@@ -168,7 +170,7 @@
             await dispatchGetUserById(this.$store, this.$router.currentRoute.params.id);
 
 
-            const user = readAdminUserById(this.$store)(this.$router.currentRoute.params.id);
+            const user = readUserProfileById(this.$store)(this.$router.currentRoute.params.id);
 
             if (user) {
                 this.username = user.username;
@@ -201,11 +203,11 @@
 
 
         public get groups() {
-            return readAdminGroups(this.$store);
+            return readGroups(this.$store);
         }
 
         public get subjects() {
-            return readAdminSubjects(this.$store).map((subject: ISubject) => {
+            return readSubjects(this.$store).map((subject: ISubject) => {
                 return {
                     id: subject.id,
                     semester: subject.semester,

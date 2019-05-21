@@ -44,9 +44,9 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readAdminSubjectById} from '@/store/admin/getters';
-    import {dispatchChangeSubjectById, dispatchGetSubjects} from '@/store/admin/actions';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+    import {readSubjectById} from '@/store/subjects/getters';
+    import {dispatchChangeSubjectById, dispatchGetSubjects} from '@/store/subjects/actions';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
     import Loader from '@/components/Loader.vue';
 
     @Component({
@@ -72,7 +72,7 @@
             this.reset();
 
             await dispatchGetSubjects(this.$store);
-            const subject = readAdminSubjectById(this.$store)(this.$router.currentRoute.params.id);
+            const subject = readSubjectById(this.$store)(this.$router.currentRoute.params.id);
 
             if (subject) {
                 this.name = subject.name;

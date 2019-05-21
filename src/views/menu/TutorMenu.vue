@@ -9,20 +9,20 @@
                     <v-list-tile-title>Тьютор</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile to="/">
+            <v-list-tile to="/tutor/tasks/all">
                 <v-list-tile-action>
                     <v-icon>error</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Создать пользователя</v-list-tile-title>
+                    <v-list-tile-title>Задания</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile to="/">
+            <v-list-tile to="/tutor/reports">
                 <v-list-tile-action>
                     <v-icon>error</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Управлять пользователями</v-list-tile-title>
+                    <v-list-tile-title>Отчеты</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list-group>

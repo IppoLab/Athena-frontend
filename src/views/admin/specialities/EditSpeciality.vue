@@ -44,9 +44,9 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readAdminSpecialityById} from '@/store/admin/getters';
-    import {dispatchChangeSpecialityById, dispatchGetSpecialities} from '@/store/admin/actions';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+    import {readSpecialityById} from '@/store/specialities/getters';
+    import {dispatchChangeSpecialityById, dispatchGetSpecialities} from '@/store/specialities/actions';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
     import Loader from '@/components/Loader.vue';
 
     @Component({
@@ -72,7 +72,7 @@
             this.reset();
 
             await dispatchGetSpecialities(this.$store);
-            const speciality = readAdminSpecialityById(this.$store)(this.$router.currentRoute.params.id);
+            const speciality = readSpecialityById(this.$store)(this.$router.currentRoute.params.id);
 
             if (speciality) {
                 this.name = speciality.name;

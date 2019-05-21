@@ -56,12 +56,12 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readUserIsStudent, readUserIsTeacher, readUserProfile} from '@/store/main/getters';
+    import {readUserIsStudent, readUserIsTeacher, readCurrentUserProfile} from '@/store/auth/getters';
 
     @Component
-    export default class UserProfile extends Vue {
+    export default class Profile extends Vue {
         get userProfile() {
-            return readUserProfile(this.$store);
+            return readCurrentUserProfile(this.$store);
         }
 
         get isStudent() {
@@ -85,11 +85,11 @@
         }
 
         get studentProfile() {
-            return readUserProfile(this.$store)!.studentProfile!;
+            return readCurrentUserProfile(this.$store)!.studentProfile!;
         }
 
         get teacherSubjects() {
-            return readUserProfile(this.$store)!.teacherProfile!.subjects;
+            return readCurrentUserProfile(this.$store)!.teacherProfile!.subjects;
         }
     }
 </script>

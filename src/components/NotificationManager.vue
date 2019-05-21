@@ -9,10 +9,12 @@
 </template>
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {IAppNotification} from '@/interfaces';
-    import {commitRemoveNotification} from '@/store/main/mutations';
-    import {readFirstNotification} from '@/store/main/getters';
-    import {dispatchRemoveNotification} from '@/store/main/actions';
+
+    import {IAppNotification} from '@/models';
+
+    import {commitRemoveNotification} from '@/store/app/mutations';
+    import {readFirstNotification} from '@/store/app/getters';
+    import {dispatchRemoveNotification} from '@/store/app/actions';
 
     @Component
     export default class NotificationsManager extends Vue {
@@ -21,9 +23,21 @@
         public showProgress: boolean = false;
         public currentNotification: IAppNotification | false = false;
 
+        public get firstNotification() {
+            return readFirstNotification(this.$store);
+        }
+
+        public get currentNotificationContent() {
+            return this.currentNotification && this.currentNotification.content || '';
+        }
+
+        public get currentNotificationColor() {
+            return this.currentNotification && this.currentNotification.color || 'info';
+        }
+
         public async hide() {
             this.show = false;
-            await new Promise((resolve, reject) => setTimeout(() => resolve(), 500));
+            await new Promise((resolve) => setTimeout(() => resolve(), 500));
         }
 
         public async close() {
@@ -37,15 +51,15 @@
             }
         }
 
-        public get firstNotification() {
-            return readFirstNotification(this.$store);
-        }
-
         public async setNotification(notification: IAppNotification | false) {
             if (this.show) {
                 await this.hide();
             }
             if (notification) {
+                if (this.currentNotification && notification.content === this.currentNotificationContent) {
+                    return;
+                }
+
                 this.currentNotification = notification;
                 this.showProgress = notification.showProgress || false;
                 this.show = true;
@@ -57,22 +71,13 @@
         @Watch('firstNotification')
         public async onNotificationChange(
             newNotification: IAppNotification | false,
-            oldNotification: IAppNotification | false,
         ) {
             if (newNotification !== this.currentNotification) {
                 await this.setNotification(newNotification);
                 if (newNotification) {
-                    await dispatchRemoveNotification(this.$store, { notification: newNotification, timeout: 6500 });
+                    await dispatchRemoveNotification(this.$store, {notification: newNotification, timeout: 6500});
                 }
             }
-        }
-
-        public get currentNotificationContent() {
-            return this.currentNotification && this.currentNotification.content || '';
-        }
-
-        public get currentNotificationColor() {
-            return this.currentNotification && this.currentNotification.color || 'info';
         }
     }
 </script>

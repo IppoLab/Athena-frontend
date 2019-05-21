@@ -10,14 +10,14 @@
         </v-list-tile>
     </v-list>
     <v-list v-else dense>
-        <v-list-tile to="/">
-            <v-list-tile-action>
-                <v-icon>home</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-                <v-list-tile-title>События</v-list-tile-title>
-            </v-list-tile-content>
-        </v-list-tile>
+<!--        <v-list-tile to="/">-->
+<!--            <v-list-tile-action>-->
+<!--                <v-icon>home</v-icon>-->
+<!--            </v-list-tile-action>-->
+<!--            <v-list-tile-content>-->
+<!--                <v-list-tile-title>События</v-list-tile-title>-->
+<!--            </v-list-tile-content>-->
+<!--        </v-list-tile>-->
         <v-list-tile to="/profile">
             <v-list-tile-action>
                 <v-icon>face</v-icon>
@@ -29,7 +29,7 @@
         <AdminMenu v-if="isAdmin"/>
         <StudentMenu v-if="isStudent"/>
         <TutorMenu v-if="iIsTutor"/>
-        <TeacherMenu v-if="isTeacher"/>
+<!--        <TeacherMenu v-if="isTeacher"/>-->
         <v-list-tile @click.prevent="logout">
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
@@ -44,17 +44,18 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {
+        readCurrentUserProfile,
         readIsLoggedIn,
         readUserIsAdmin,
-        readUserIsStudent, readUserIsTeacher,
+        readUserIsStudent,
+        readUserIsTeacher,
         readUserIsTutor,
-        readUserProfile,
-    } from '@/store/main/getters';
+    } from '@/store/auth/getters';
     import AdminMenu from '@/views/menu/AdminMenu.vue';
     import StudentMenu from '@/views/menu/StudentMenu.vue';
     import TutorMenu from '@/views/menu/TutorMenu.vue';
     import TeacherMenu from '@/views/menu/TeacherMenu.vue';
-    import {dispatchLogout} from '@/store/main/actions';
+    import {dispatchLogout} from '@/store/auth/actions';
 
     @Component({
         components: {

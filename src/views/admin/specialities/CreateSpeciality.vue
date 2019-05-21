@@ -42,8 +42,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {rolesRus, studentRoleName} from '@/constants';
-    import {dispatchCreateSpeciality, dispatchCreateSubject, dispatchCreateUser} from '@/store/admin/actions';
+    import {dispatchCreateSpeciality} from '@/store/specialities/actions';
 
     @Component
     export default class CreateSpeciality extends Vue {

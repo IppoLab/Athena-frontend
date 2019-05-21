@@ -44,10 +44,12 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readAdminGroupById, readAdminSpecialities} from '@/store/admin/getters';
-    import {dispatchChangeGroupById, dispatchGetGroups} from '@/store/admin/actions';
-    import {IDisplaySpeciality, ISpeciality} from '@/interfaces';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+
+    import {readGroupById} from '@/store/groups/getters';
+    import {readSpecialities} from '@/store/specialities/getters';
+    import {dispatchChangeGroupById, dispatchGetGroupById} from '@/store/groups/actions';
+    import {ListElementSpeciality} from '@/models';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
     import Loader from '@/components/Loader.vue';
 
     @Component({
@@ -55,7 +57,7 @@
     })
     export default class EditGroup extends Vue {
         public name: string = '';
-        public speciality: IDisplaySpeciality | null = null;
+        public speciality: ListElementSpeciality | null = null;
         public formError: string | boolean = false;
         public loaded: boolean = false;
 
@@ -72,19 +74,13 @@
         public async mounted() {
             this.reset();
 
-            await dispatchGetGroups(this.$store);
-            const group = readAdminGroupById(this.$store)(this.$router.currentRoute.params.id);
+            await dispatchGetGroupById(this.$store, this.$router.currentRoute.params.id);
+
+            const group = readGroupById(this.$store)(this.$router.currentRoute.params.id);
 
             if (group) {
-                const speciality = group.speciality!;
-
                 this.name = group.name;
-                this.speciality = {
-                    id: speciality.id,
-                    name: speciality.name,
-                    cipher: speciality.cipher,
-                    display: `${speciality.cipher} ${speciality.name}`,
-                };
+                this.speciality = new ListElementSpeciality(group.speciality!);
             } else {
                 await dispatchRouteNotFound(this.$store);
             }
@@ -92,15 +88,8 @@
             this.loaded = true;
         }
 
-        public get specialities() {
-            return readAdminSpecialities(this.$store).map((speciality: ISpeciality) => {
-                return {
-                    id: speciality.id,
-                    name: speciality.name,
-                    cipher: speciality.cipher,
-                    display: `${speciality.cipher} ${speciality.name}`,
-                };
-            });
+        public get specialities(): ListElementSpeciality[] {
+            return readSpecialities(this.$store).map((speciality) => new ListElementSpeciality(speciality));
         }
 
         public get fieldsAreValid() {
