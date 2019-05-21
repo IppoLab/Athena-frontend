@@ -10,14 +10,14 @@
         </v-list-tile>
     </v-list>
     <v-list v-else dense>
-        <v-list-tile to="/">
-            <v-list-tile-action>
-                <v-icon>home</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-                <v-list-tile-title>События</v-list-tile-title>
-            </v-list-tile-content>
-        </v-list-tile>
+<!--        <v-list-tile to="/">-->
+<!--            <v-list-tile-action>-->
+<!--                <v-icon>home</v-icon>-->
+<!--            </v-list-tile-action>-->
+<!--            <v-list-tile-content>-->
+<!--                <v-list-tile-title>События</v-list-tile-title>-->
+<!--            </v-list-tile-content>-->
+<!--        </v-list-tile>-->
         <v-list-tile to="/profile">
             <v-list-tile-action>
                 <v-icon>face</v-icon>
@@ -26,10 +26,10 @@
                 <v-list-tile-title>Профиль</v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
-        <AdminMenu v-if="userIsAdmin"/>
-        <StudentMenu v-if="userIsStudent"/>
-        <TutorMenu v-if="userIsTutor"/>
-        <TeacherMenu v-if="userIsTeacher"/>
+        <AdminMenu v-if="isAdmin"/>
+        <StudentMenu v-if="isStudent"/>
+        <TutorMenu v-if="iIsTutor"/>
+<!--        <TeacherMenu v-if="isTeacher"/>-->
         <v-list-tile @click.prevent="logout">
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
@@ -44,17 +44,18 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import {
+        readCurrentUserProfile,
         readIsLoggedIn,
         readUserIsAdmin,
-        readUserIsStudent, readUserIsTeacher,
+        readUserIsStudent,
+        readUserIsTeacher,
         readUserIsTutor,
-        readUserProfile,
-    } from '@/store/main/getters';
+    } from '@/store/auth/getters';
     import AdminMenu from '@/views/menu/AdminMenu.vue';
     import StudentMenu from '@/views/menu/StudentMenu.vue';
     import TutorMenu from '@/views/menu/TutorMenu.vue';
     import TeacherMenu from '@/views/menu/TeacherMenu.vue';
-    import {dispatchLogout} from '@/store/main/actions';
+    import {dispatchLogout} from '@/store/auth/actions';
 
     @Component({
         components: {
@@ -73,19 +74,19 @@
             await dispatchLogout(this.$store);
         }
 
-        get userIsAdmin() {
+        get isAdmin() {
             return readUserIsAdmin(this.$store);
         }
 
-        get userIsStudent() {
+        get isStudent() {
             return readUserIsStudent(this.$store);
         }
 
-        get userIsTutor() {
+        get iIsTutor() {
             return readUserIsTutor(this.$store);
         }
 
-        get userIsTeacher() {
+        get isTeacher() {
             return readUserIsTeacher(this.$store);
         }
     }

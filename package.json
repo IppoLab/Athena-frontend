@@ -11,12 +11,13 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
-    "jwt-decode": "^2.2.0",
+    "luxon": "^1.15.0",
     "register-service-worker": "^1.0.0",
     "typesafe-vuex": "^3.1.1",
     "vee-validate": "^2.1.7",
     "vue": "^2.5.22",
     "vue-class-component": "^6.0.0",
+    "vue-luxon": "^0.6.2",
     "vue-property-decorator": "^7.3.0",
     "vue-router": "^3.0.2",
     "vuetify": "^1.4.4",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
+    "@types/luxon": "^1.13.0",
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-pwa": "^3.3.0",
     "@vue/cli-plugin-typescript": "^3.3.0",
@@ -72,6 +74,6 @@
     "testMatch": [
       "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
     ],
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost:8080/"
   }
 }

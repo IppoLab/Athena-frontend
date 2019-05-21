@@ -5,8 +5,8 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import store from '@/store';
-    import {readIsLoggedIn} from '@/store/main/getters';
-    import {dispatchCheckLoggedIn} from '@/store/main/actions';
+    import {readIsLoggedIn} from '@/store/auth/getters';
+    import {dispatchCheckLoggedIn} from '@/store/auth/actions';
 
     const startRouteGuard = async (to, from, next) => {
         await dispatchCheckLoggedIn(store);
@@ -23,12 +23,12 @@
 
     @Component
     export default class Start extends Vue {
-        public beforeRouteEnter(to, from, next) {
-            startRouteGuard(to, from, next);
+        public async beforeRouteEnter(to, from, next) {
+            await startRouteGuard(to, from, next);
         }
 
-        public beforeRouteUpdate(to, from, next) {
-            startRouteGuard(to, from, next);
+        public async beforeRouteUpdate(to, from, next) {
+            await startRouteGuard(to, from, next);
         }
     }
 </script>

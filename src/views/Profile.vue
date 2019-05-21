@@ -18,11 +18,34 @@
                                 </div>
                                 <div class="title primary--text text--darken-2" v-else>-----</div>
                             </div>
+                            <v-divider></v-divider>
                             <div class="my-3">
                                 <div class="subheading text--lighten-3">ФИО</div>
                                 <div class="title primary--text" v-if="fullName">{{fullName}}</div>
                                 <div class="title primary--text" v-else>-----</div>
                             </div>
+                            <div v-if="isStudent">
+                                <v-divider></v-divider>
+                                <div class="my-3">
+                                    <div class="subheading text--lighten-3">Группа</div>
+                                    <div class="title primary--text">{{studentProfile.studentGroup.name}}</div>
+                                    <div class="subheading text--lighten-3">Направление</div>
+                                    <div class="title primary--text">{{studentProfile.studentGroup.speciality.name}} {{studentProfile.studentGroup.speciality.cipher}}</div>
+                                    <div class="subheading text--lighten-3">Шифр</div>
+                                    <div class="title primary--text">{{studentProfile.cipher}}</div>
+                                </div>
+                            </div>
+                            <div v-if="isTeacher">
+                                <v-divider></v-divider>
+                                <div class="my-3">
+                                    <div class="subheading text--lighten-3">Предметы</div>
+                                    <v-chip class="title primary--text" v-for="subject of teacherSubjects" :key="subject.id">{{subject.name}} ({{subject.semester}})</v-chip>
+                                </div>
+                            </div>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn :disabled="true">Сменить пароль</v-btn>
+                            </v-card-actions>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -33,16 +56,20 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readUserIsStudent, readUserProfile} from '@/store/main/getters';
+    import {readUserIsStudent, readUserIsTeacher, readCurrentUserProfile} from '@/store/auth/getters';
 
     @Component
-    export default class UserProfile extends Vue {
+    export default class Profile extends Vue {
         get userProfile() {
-            return readUserProfile(this.$store);
+            return readCurrentUserProfile(this.$store);
         }
 
-        get userIsStudent() {
+        get isStudent() {
             return readUserIsStudent(this.$store);
+        }
+
+        get isTeacher() {
+            return readUserIsTeacher(this.$store);
         }
 
         get fullName() {
@@ -55,6 +82,14 @@
             }
 
             return '';
+        }
+
+        get studentProfile() {
+            return readCurrentUserProfile(this.$store)!.studentProfile!;
+        }
+
+        get teacherSubjects() {
+            return readCurrentUserProfile(this.$store)!.teacherProfile!.subjects;
         }
     }
 </script>

@@ -1,56 +1,62 @@
 <template>
-    <v-container class="fluid">
-        <v-card class="elevation-10">
-            <v-toolbar>
-                <v-toolbar-title primary-title>Изменение направления</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            <v-card-text>
-                <template>
-                    <v-form lazy-validation>
-                        <v-text-field
-                                v-model="name"
-                                label="Название"
-                                :rules="[() => !!name || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-text-field
-                                v-model="cipher"
-                                label="Шифр"
-                                :rules="[() => !!cipher || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                    </v-form>
-                    <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
-                        {{formError}}
-                    </v-alert>
-                </template>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="cancel">Назад</v-btn>
-                <v-btn @click="reset">Очистить</v-btn>
-                <v-btn @click="submit" :disabled="!fieldsAreValid">
-                    Изменить
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-container>
+    <Loader :loading="!loaded">
+        <v-container slot="content" class="fluid">
+            <v-card class="elevation-10">
+                <v-toolbar>
+                    <v-toolbar-title primary-title>Изменение направления</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                    <template>
+                        <v-form lazy-validation>
+                            <v-text-field
+                                    v-model="name"
+                                    label="Название"
+                                    :rules="[() => !!name || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-text-field
+                                    v-model="cipher"
+                                    label="Шифр"
+                                    :rules="[() => !!cipher || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                        </v-form>
+                        <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
+                            {{formError}}
+                        </v-alert>
+                    </template>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="cancel">Назад</v-btn>
+                    <v-btn @click="reset">Очистить</v-btn>
+                    <v-btn @click="submit" :disabled="!fieldsAreValid">
+                        Изменить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-container>
+    </Loader>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readAdminSpecialityById} from '@/store/admin/getters';
-    import {dispatchChangeSpecialityById, dispatchGetSpecialities} from '@/store/admin/actions';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+    import {readSpecialityById} from '@/store/specialities/getters';
+    import {dispatchChangeSpecialityById, dispatchGetSpecialities} from '@/store/specialities/actions';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
+    import Loader from '@/components/Loader.vue';
 
-    @Component
+    @Component({
+        components: {Loader},
+    })
     export default class EditSubject extends Vue {
         public name: string = '';
         public cipher: string = '';
         public formError: string | boolean = false;
+        public loaded: boolean = false;
 
         public reset() {
             this.name = '';
@@ -66,7 +72,7 @@
             this.reset();
 
             await dispatchGetSpecialities(this.$store);
-            const speciality = readAdminSpecialityById(this.$store)(this.$router.currentRoute.params.id);
+            const speciality = readSpecialityById(this.$store)(this.$router.currentRoute.params.id);
 
             if (speciality) {
                 this.name = speciality.name;
@@ -74,6 +80,8 @@
             } else {
                 await dispatchRouteNotFound(this.$store);
             }
+
+            this.loaded = true;
         }
 
         public get fieldsAreValid() {

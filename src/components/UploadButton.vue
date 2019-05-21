@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-btn :color="color" @click="trigger"><slot>Выберите файл</slot></v-btn>
-        <input :multiple="multiple" class="visually-hidden" type="file" v-on:change="files" ref="fileInput">
+        <v-btn :color="color" @click="trigger"><slot name="content">Выберите файл</slot></v-btn>
+        <input :multiple="multiple" class="visually-hidden" type="file" :accept="acceptable" v-on:change="files" ref="fileInput">
     </div>
 </template>
 
@@ -12,6 +12,7 @@
     export default class UploadButton extends Vue {
         @Prop(String) public color: string | undefined;
         @Prop({default: false}) public multiple!: boolean;
+        @Prop({default: '*'}) public acceptable: string | undefined;
 
         @Emit()
         public files(e): FileList {

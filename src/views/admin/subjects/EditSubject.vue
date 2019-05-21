@@ -1,55 +1,62 @@
 <template>
-    <v-container class="fluid">
-        <v-card class="elevation-10">
-            <v-toolbar>
-                <v-toolbar-title primary-title>Изменение предмета</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            <v-card-text>
-                <template>
-                    <v-form lazy-validation>
-                        <v-text-field
-                                v-model="name"
-                                label="Название предмета"
-                                :rules="[() => !!name || 'Поле обязательно']"
-                                required
-                                type="text">
-                        </v-text-field>
-                        <v-text-field
-                                v-model="semester"
-                                label="Семестр"
-                                required
-                                type="number" min="1" max="8">
-                        </v-text-field>
-                    </v-form>
-                    <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
-                        {{formError}}
-                    </v-alert>
-                </template>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="cancel">Назад</v-btn>
-                <v-btn @click="reset">Очистить</v-btn>
-                <v-btn @click="submit" :disabled="!fieldsAreValid">
-                    Изменить
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-container>
+    <Loader :loading="!loaded">
+        <v-container slot="content" class="fluid">
+            <v-card class="elevation-10">
+                <v-toolbar>
+                    <v-toolbar-title primary-title>Изменение предмета</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                    <template>
+                        <v-form lazy-validation>
+                            <v-text-field
+                                    v-model="name"
+                                    label="Название предмета"
+                                    :rules="[() => !!name || 'Поле обязательно']"
+                                    required
+                                    type="text">
+                            </v-text-field>
+                            <v-text-field
+                                    v-model="semester"
+                                    label="Семестр"
+                                    required
+                                    type="number" min="1" max="8">
+                            </v-text-field>
+                        </v-form>
+                        <v-alert :value="formError" type="error" transition="fade-transition" v-if="formError">
+                            {{formError}}
+                        </v-alert>
+                    </template>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="cancel">Назад</v-btn>
+                    <v-btn @click="reset">Очистить</v-btn>
+                    <v-btn @click="submit" :disabled="!fieldsAreValid">
+                        Изменить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-container>
+    </Loader>
+
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readAdminSubjectById} from '@/store/admin/getters';
-    import {dispatchChangeSubjectById, dispatchGetSubjects} from '@/store/admin/actions';
-    import {dispatchRouteNotFound} from '@/store/main/actions';
+    import {readSubjectById} from '@/store/subjects/getters';
+    import {dispatchChangeSubjectById, dispatchGetSubjects} from '@/store/subjects/actions';
+    import {dispatchRouteNotFound} from '@/store/app/actions';
+    import Loader from '@/components/Loader.vue';
 
-    @Component
+    @Component({
+        components: {Loader},
+    })
     export default class EditSubject extends Vue {
         public name: string = '';
         public semester: number = 1;
         public formError: string | boolean = false;
+        public loaded: boolean = false;
 
         public reset() {
             this.name = '';
@@ -65,7 +72,7 @@
             this.reset();
 
             await dispatchGetSubjects(this.$store);
-            const subject = readAdminSubjectById(this.$store)(this.$router.currentRoute.params.id);
+            const subject = readSubjectById(this.$store)(this.$router.currentRoute.params.id);
 
             if (subject) {
                 this.name = subject.name;
@@ -73,6 +80,8 @@
             } else {
                 await dispatchRouteNotFound(this.$store);
             }
+
+            this.loaded = true;
         }
 
         public get fieldsAreValid() {
