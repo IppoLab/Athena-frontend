@@ -32,13 +32,17 @@ import {
 } from '@/models';
 import {getLocalApiUrl} from '@/helpers/app';
 
+const axiosInstance = axios.create({
+    baseURL: apiUrl,
+});
+
 if (env !== 'production') {
-    axios.interceptors.request.use((request) => {
+    axiosInstance.interceptors.request.use((request) => {
         console.log('Request: ', request);
         return request;
     });
 
-    axios.interceptors.response.use((response) => {
+    axiosInstance.interceptors.response.use((response) => {
         console.log('Response: ', response);
         return response;
     });
@@ -46,18 +50,18 @@ if (env !== 'production') {
 
 export function setAxiosApiUrl(newUrl?: string) {
     if (newUrl) {
-        axios.defaults.baseURL = newUrl;
+        axiosInstance.defaults.baseURL = newUrl;
     } else if (getLocalApiUrl()) {
-        axios.defaults.baseURL = getLocalApiUrl();
+        axiosInstance.defaults.baseURL = getLocalApiUrl();
     } else {
-        axios.defaults.baseURL = apiUrl;
+        axiosInstance.defaults.baseURL = apiUrl;
     }
 }
 
 setAxiosApiUrl();
 
 export function setAxiosAuthToken(token: string) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
 
 function buildFormData<T>(object: T) {
@@ -74,107 +78,107 @@ function buildFormData<T>(object: T) {
 
 const authApi = {
     loginGetToken: async (user: IUserInLogin) => {
-        return axios.post<IAuthResponse>('/auth/login/', user);
+        return axiosInstance.post<IAuthResponse>('/auth/login/', user);
     },
     verifyToken: async (token: string) => {
-        return axios.post('/auth/token/verify/', {token});
+        return axiosInstance.post('/auth/token/verify/', {token});
     },
     refreshToken: async (refresh: string) => {
-        return axios.post<IAuthResponse>('/auth/token/refresh/', {refresh});
+        return axiosInstance.post<IAuthResponse>('/auth/token/refresh/', {refresh});
     },
     getMe: async () => {
-        return axios.get<IUserProfileInResponse>('/auth/profile/me/');
+        return axiosInstance.get<IUserProfileInResponse>('/auth/profile/me/');
     },
 };
 
 const usersApi = {
     getUserProfiles: async () => {
-        return axios.get<IUserProfileInResponse[]>(`/auth/users/`);
+        return axiosInstance.get<IUserProfileInResponse[]>(`/auth/users/`);
     },
     createUserProfile: async (user: IUserProfileInCreate) => {
-        return axios.post<IUserProfileInResponse>('/auth/users/', user);
+        return axiosInstance.post<IUserProfileInResponse>('/auth/users/', user);
     },
     getUserProfileById: async (userId: string) => {
-        return axios.get<IUserProfileInResponse>(`/auth/users/${userId}`);
+        return axiosInstance.get<IUserProfileInResponse>(`/auth/users/${userId}`);
     },
     changeUserProfileById: async (userId: string, user: IUserProfileInUpdate) => {
-        return axios.put<IUserProfileInResponse>(`/auth/users/${userId}/`, user);
+        return axiosInstance.put<IUserProfileInResponse>(`/auth/users/${userId}/`, user);
     },
     getStudentProfileById: async (studentId: string) => {
-        return axios.get<IStudentProfileInResponse>(`/auth/students/${studentId}/`);
+        return axiosInstance.get<IStudentProfileInResponse>(`/auth/students/${studentId}/`);
     },
     changeStudentProfileById: async (studentId: string, student: IStudentProfileInUpdate) => {
-        return axios.put<IStudentProfileInResponse>(`/auth/students/${studentId}/`, student);
+        return axiosInstance.put<IStudentProfileInResponse>(`/auth/students/${studentId}/`, student);
     },
     getTeacherProfileById: async (teacherId: string) => {
-        return axios.get<ITeacherProfileInResponse>(`/auth/teachers/${teacherId}/`);
+        return axiosInstance.get<ITeacherProfileInResponse>(`/auth/teachers/${teacherId}/`);
     },
     changeTeacherProfileById: async (teacherId: string, teacher: ITeacherProfileInAPI) => {
-        return axios.put<ITeacherProfileInResponse>(`/auth/teachers/${teacherId}/`, teacher);
+        return axiosInstance.put<ITeacherProfileInResponse>(`/auth/teachers/${teacherId}/`, teacher);
     },
 };
 
 const subjectsApi = {
     getSubjects: async () => {
-        return axios.get<ISubjectInResponse[]>('/edu/subjects/');
+        return axiosInstance.get<ISubjectInResponse[]>('/edu/subjects/');
     },
     createSubject: async (subject: ISubjectInCreate) => {
-        return axios.post<ISubjectInResponse>('/edu/subjects/', subject);
+        return axiosInstance.post<ISubjectInResponse>('/edu/subjects/', subject);
     },
     getSubjectById: async (subjectId: string) => {
-        return axios.get<ISubjectInResponse>(`/edu/subjects/${subjectId}/`);
+        return axiosInstance.get<ISubjectInResponse>(`/edu/subjects/${subjectId}/`);
     },
     changeSubjectById: async (subjectId: string, subject: ISubjectInUpdate) => {
-        return axios.put<ISubjectInResponse>(`/edu/subjects/${subjectId}/`, subject);
+        return axiosInstance.put<ISubjectInResponse>(`/edu/subjects/${subjectId}/`, subject);
     },
 };
 
 const specialitiesApi = {
     getSpecialities: async () => {
-        return axios.get<ISpecialityInResponse[]>('/edu/specialities/');
+        return axiosInstance.get<ISpecialityInResponse[]>('/edu/specialities/');
     },
     createSpeciality: async (speciality: ISpecialityInCreate) => {
-        return axios.post<ISpecialityInResponse>('/edu/specialities/', speciality);
+        return axiosInstance.post<ISpecialityInResponse>('/edu/specialities/', speciality);
     },
     getSpecialityById: async (specialityId: string) => {
-        return axios.get<ISpecialityInResponse>(`/edu/specialities/${specialityId}/`);
+        return axiosInstance.get<ISpecialityInResponse>(`/edu/specialities/${specialityId}/`);
     },
     changeSpecialityById: async (specialityId: string, speciality: ISpecialityInUpdate) => {
-        return axios.put<ISpecialityInResponse>(`/edu/specialities/${specialityId}/`, speciality);
+        return axiosInstance.put<ISpecialityInResponse>(`/edu/specialities/${specialityId}/`, speciality);
     },
 };
 
 const groupsApi = {
     getGroups: async () => {
-        return axios.get<IGroupInResponse[]>(`/edu/student-groups/`);
+        return axiosInstance.get<IGroupInResponse[]>(`/edu/student-groups/`);
     },
     createGroup: async (group: IGroupInCreate) => {
-        return axios.post<IGroupInResponse>(`/edu/student-groups/`, group);
+        return axiosInstance.post<IGroupInResponse>(`/edu/student-groups/`, group);
     },
     getGroupById: async (groupId: string) => {
-        return axios.get<IGroupInResponse>(`/edu/student-groups/${groupId}`);
+        return axiosInstance.get<IGroupInResponse>(`/edu/student-groups/${groupId}`);
     },
     changeGroupById: async (groupId: string, group: IGroupInUpdate) => {
-        return axios.put<IGroupInResponse>(`/edu/student-groups/${groupId}/`, group);
+        return axiosInstance.put<IGroupInResponse>(`/edu/student-groups/${groupId}/`, group);
     },
 };
 
 const tasksApi = {
     getTasks: async () => {
-        return axios.get<ITaskInResponse[]>('/works/tasks/');
+        return axiosInstance.get<ITaskInResponse[]>('/works/tasks/');
     },
     createTask: async (task: ITaskInCreate) => {
-        return axios.post<ITaskInResponse>('/works/tasks/', buildFormData(task), {
+        return axiosInstance.post<ITaskInResponse>('/works/tasks/', buildFormData(task), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
     },
     getTaskById: async (taskId: string) => {
-        return axios.get<ITaskInResponse>(`/works/tasks/${taskId}/`);
+        return axiosInstance.get<ITaskInResponse>(`/works/tasks/${taskId}/`);
     },
     updateTaskById: async (taskId: string, task: ITaskInUpdate) => {
-        return axios.patch<ITaskInResponse>(`/works/tasks/${taskId}/`, buildFormData(task), {
+        return axiosInstance.patch<ITaskInResponse>(`/works/tasks/${taskId}/`, buildFormData(task), {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -184,22 +188,22 @@ const tasksApi = {
 
 const reportsApi = {
     getStudentReportForTask: async (taskId: string) => {
-        return axios.get<IReportInResponse>(`/works/tasks/${taskId}/report/`);
+        return axiosInstance.get<IReportInResponse>(`/works/tasks/${taskId}/report/`);
     },
     getReportById: async (reportId: string) => {
-        return axios.get<IReportInResponse>(`works/reports/${reportId}/`);
+        return axiosInstance.get<IReportInResponse>(`works/reports/${reportId}/`);
     },
     createReport: async (report: IReportInCreate) => {
-        return axios.post<IReportInResponse>('/works/reports/', buildFormData(report));
+        return axiosInstance.post<IReportInResponse>('/works/reports/', buildFormData(report));
     },
     updateReportById: async (reportId: string, report: IReportInUpdate) => {
-        return axios.patch<IReportInResponse>(`works/reports/${reportId}/`, buildFormData(report));
+        return axiosInstance.patch<IReportInResponse>(`works/reports/${reportId}/`, buildFormData(report));
     },
     getReports: async () => {
-        return axios.get<IReportInResponse[]>('works/reports/');
+        return axiosInstance.get<IReportInResponse[]>('works/reports/');
     },
     checkReport: async (reportId: string, report) => {
-        return axios.put<IReportInCheck>(`works/reports/${reportId}/`, report);
+        return axiosInstance.put<IReportInCheck>(`works/reports/${reportId}/`, report);
     },
 };
 

@@ -13,7 +13,6 @@ import {dispatchGetUserById} from '@/store/users/actions';
 import {AuthState} from './state';
 import {readAccessToken, readIsLoggedIn, readLoginError, readRefreshToken} from './getters';
 import {commitSetAuthTokens, commitSetCurrentUserProfile, commitSetLoggedIn, commitSetLoginError} from './mutations';
-import {AxiosError} from 'axios';
 
 
 export type AuthContext = ActionContext<AuthState | any, State>;
