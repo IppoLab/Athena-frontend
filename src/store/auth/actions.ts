@@ -8,12 +8,12 @@ import {State} from '@/store/state';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
 import {readUserProfileById} from '@/store/users/getters';
-import {commitSetUserProfile} from '@/store/users/mutations';
 import {dispatchGetUserById} from '@/store/users/actions';
 
 import {AuthState} from './state';
 import {readAccessToken, readIsLoggedIn, readLoginError, readRefreshToken} from './getters';
 import {commitSetAuthTokens, commitSetCurrentUserProfile, commitSetLoggedIn, commitSetLoginError} from './mutations';
+import {AxiosError} from 'axios';
 
 
 export type AuthContext = ActionContext<AuthState | any, State>;
@@ -26,23 +26,19 @@ export const actions = {
 
             const response = await api.loginGetToken(payload);
             const auth = response.data;
-            if (response.data) {
-                saveLocalTokens(auth);
 
-                setAxiosAuthToken(auth.access);
+            saveLocalTokens(auth);
+            setAxiosAuthToken(auth.access);
 
-                commitSetAuthTokens(context, auth);
-                commitSetLoggedIn(context, true);
-                commitSetLoginError(context, false);
+            commitSetAuthTokens(context, auth);
+            commitSetLoggedIn(context, true);
+            commitSetLoginError(context, false);
 
-                await dispatchGetCurrentUserProfile(context);
-                await dispatchRouteLoggedIn(context);
+            await dispatchGetCurrentUserProfile(context);
+            await dispatchRouteLoggedIn(context);
 
-                commitRemoveNotification(context, loadingNotification);
-                commitAddNotification(context, {content: 'Вход произведен', color: 'success'});
-            } else {
-                await dispatchLogout(context);
-            }
+            commitRemoveNotification(context, loadingNotification);
+            commitAddNotification(context, {content: 'Вход произведен', color: 'success'});
         } catch (e) {
             commitSetLoginError(context, true);
             await dispatchLogout(context);
