@@ -58,7 +58,7 @@
                                     item-text="name"
                                     label="Группа"> a couple of solutions.
 
-#
+                                #
                             </v-combobox>
                             <v-combobox
                                     :items="subjects"
@@ -132,8 +132,8 @@
         public name: string = '';
         public description: string = '';
         public deadline: string = '';
-        public file: File | null | string = null;
-        public attachment: File | null | string = null;
+        public file?: File;
+        public attachment?: File;
         public group: IGroup | null = null;
         public subject: ISubjectInSelect | null = null;
         public loaded: boolean = false;
@@ -173,8 +173,6 @@
                         display: `${subject.name} (${subject.semester} семестр)`,
                     };
                 })(readSubjectById(this.$store)(task.subject.id)!);
-                this.file = task.file;
-                this.attachment = task.attachment;
             }
 
             this.loaded = true;
@@ -186,8 +184,8 @@
             this.deadline = '';
             this.group = null;
             this.subject = null;
-            this.file = '';
-            this.attachment = '';
+            this.file = undefined;
+            this.attachment = undefined;
         }
 
         public get groups() {
@@ -227,8 +225,8 @@
                     subject: this.subject!.id,
                     studentGroup: this.group!.id,
                     deadline: this.deadline,
-                    file: (this.file as File) || undefined,
-                    attachment: (this.attachment as File) || undefined,
+                    file: this.file,
+                    attachment: this.attachment,
                 },
             });
         }
