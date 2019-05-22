@@ -1,8 +1,8 @@
-.. |frontend_master_build| image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/master
+.. |frontend_master_build| image:: https://circleci.com/gh/ippolab/athena-frontend/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/ippolab/athena-frontend/tree/master
 
-.. |frontend_dev_build| image:: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev.svg?style=svg
-    :target: https://circleci.com/gh/IppoLab/Athena-frontend/tree/dev
+.. |frontend_dev_build| image:: https://circleci.com/gh/ippolab/athena-frontend/tree/dev.svg?style=svg
+    :target: https://circleci.com/gh/ippoLab/athena-frontend/tree/dev
 
 .. _yarn: https://yarnpkg.com
 
@@ -36,6 +36,6 @@ Use following commands to work with application::
 
 If you need responses from api for application you can clone backend_ part and run it with ``docker``. More info in README_.
 
-.. _backend: https://github.com/IppoLab/Athena-backend
-.. _README: https://github.com/IppoLab/Athena-backend/blob/dev/README.rst
+.. _backend: https://github.com/ippolab/athena-backend
+.. _README: https://github.com/ippolab/athena-backend/blob/dev/README.rst
 
