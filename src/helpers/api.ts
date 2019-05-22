@@ -62,6 +62,7 @@ setAxiosApiUrl();
 
 export function setAxiosAuthToken(token: string) {
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+    axiosInstance.defaults.headers.common['X-Athena-Authorization'] = `Bearer ${token}`; // for safari-based browsers
 }
 
 function buildFormData<T>(object: T) {
