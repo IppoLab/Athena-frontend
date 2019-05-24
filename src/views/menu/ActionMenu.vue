@@ -20,7 +20,7 @@
 <!--        </v-list-tile>-->
         <v-list-tile to="/profile">
             <v-list-tile-action>
-                <v-icon>face</v-icon>
+                <v-icon>account_circle</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
                 <v-list-tile-title>Профиль</v-list-tile-title>

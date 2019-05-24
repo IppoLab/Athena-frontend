@@ -14,7 +14,7 @@
                     <td>{{ props.item.deadline }}</td>
                     <td class="justify-center layout px-0">
                         <v-btn slot="activator" flat :to="{name: 'student-view-task', params: {id: props.item.id}}">
-                            <v-icon>edit</v-icon>
+                            <v-icon>remove_red_eye</v-icon>
                         </v-btn>
                     </td>
                 </template>

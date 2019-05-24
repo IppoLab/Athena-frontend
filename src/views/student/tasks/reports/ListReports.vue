@@ -17,7 +17,7 @@
                             <span>Изменить</span>
                             <v-btn slot="activator" flat
                                    :to="{name: 'student-view-report', params: {id: props.item.task.id}}">
-                                <v-icon>edit</v-icon>
+                                <v-icon>remove_red_eye</v-icon>
                             </v-btn>
                         </v-tooltip>
                     </td>
