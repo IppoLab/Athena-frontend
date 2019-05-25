@@ -1,24 +1,21 @@
 <template>
     <Loader :loading="!loaded">
         <div slot="content">
-            <ListTableHeader buttonLink="/admin/specialities/create" :search.sync="search"></ListTableHeader>
+            <ListTableHeader :search.sync="search"></ListTableHeader>
             <v-data-table
                     :headers="headers"
-                    :items="specialities"
+                    :items="tasks"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search">
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.cipher }}</td>
+                    <td>{{ props.item.subject.name }}</td>
+                    <td>{{ props.item.deadline }}</td>
                     <td class="justify-center layout px-0">
-                        <v-tooltip top>
-                            <span>Изменить</span>
-                            <v-btn slot="activator" flat
-                                   :to="{name: 'admin-specialities-edit', params: {id: props.item.id}}">
-                                <v-icon>edit</v-icon>
-                            </v-btn>
-                        </v-tooltip>
+                        <v-btn slot="activator" flat :to="{name: 'tasks-view', params: {id: props.item.id}}">
+                            <v-icon>remove_red_eye</v-icon>
+                        </v-btn>
                     </td>
                 </template>
                 <template slot="no-data">
@@ -41,8 +38,8 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readSpecialities} from '@/store/specialities/getters';
-    import {dispatchGetSpecialities} from '@/store/specialities/actions';
+    import {readTasks} from '@/store/tasks/getters';
+    import {dispatchGetTasks} from '@/store/tasks/actions';
     import ListTableHeader from '@/components/ListTableHeader.vue';
     import Loader from '@/components/Loader.vue';
 
@@ -52,7 +49,7 @@
             ListTableHeader,
         },
     })
-    export default class ListSpecialities extends Vue {
+    export default class ListTasks extends Vue {
         public loaded: boolean = false;
 
         public search: string = '';
@@ -69,8 +66,14 @@
                 align: 'left',
             },
             {
-                text: 'Шифр',
-                value: 'semester',
+                text: 'Предмет',
+                value: 'subject',
+                sortable: false,
+                align: 'left',
+            },
+            {
+                text: 'Срок сдачи',
+                value: 'deadline',
                 sortable: true,
                 align: 'left',
             },
@@ -85,13 +88,14 @@
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         }
 
-        get specialities() {
-            return readSpecialities(this.$store);
+        get tasks() {
+            return readTasks(this.$store);
         }
 
         public async mounted() {
-            await dispatchGetSpecialities(this.$store);
-            this.pagination.totalItems = this.specialities.length;
+            await dispatchGetTasks(this.$store);
+            this.pagination.totalItems = this.tasks.length;
+
             this.loaded = true;
         }
     }

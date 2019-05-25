@@ -31,7 +31,7 @@ export const actions = {
         });
     },
     actionRouteNotFound: () => {
-        router.push('/');
+        router.replace({name: 'not-found'});
     },
     actionCheckApiError: async (context: AppContext, payload: AxiosError) => {
         switch (payload.response!.status) {

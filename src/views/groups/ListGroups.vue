@@ -1,27 +1,20 @@
 <template>
-    <Loader :loading="!loaded">
+    <Loader>
         <div slot="content">
-            <ListTableHeader buttonLink="/admin/users/create" :search.sync="search"></ListTableHeader>
+            <ListTableHeader buttonLink="/admin/groups/create" :search.sync="search"></ListTableHeader>
             <v-data-table
                     :headers="headers"
-                    :items="users"
+                    :items="groups"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search">
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.username }}</td>
-                    <td>{{ props.item.secondName }}</td>
-                    <td>{{ props.item.firstName }}</td>
-                    <td>{{ props.item.lastName }}</td>
-                    <td>
-                    <span v-for="role in roles" :key="role.id">
-                        <v-chip v-if="props.item.roles.includes(role[0])">{{role[1]}}</v-chip>
-                    </span>
-                    </td>
+                    <td>{{ props.item.name }}</td>
+                    <td>{{ props.item.speciality.cipher }} {{ props.item.speciality.name }}</td>
                     <td class="justify-center layout px-0">
                         <v-tooltip top>
                             <span>Изменить</span>
-                            <v-btn slot="activator" flat :to="{name: 'admin-users-edit', params: {id: props.item.id}}">
+                            <v-btn slot="activator" flat :to="{name: 'groups-edit', params: {id: props.item.id}}">
                                 <v-icon>edit</v-icon>
                             </v-btn>
                         </v-tooltip>
@@ -47,9 +40,8 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readUsers} from '@/store/users/getters';
-    import {dispatchGetUsers} from '@/store/users/actions';
-    import {rolesRus} from '@/configs/constants';
+    import {readGroups} from '@/store/groups/getters';
+    import {dispatchGetGroups} from '@/store/groups/actions';
     import ListTableHeader from '@/components/ListTableHeader.vue';
     import Loader from '@/components/Loader.vue';
 
@@ -59,8 +51,9 @@
             ListTableHeader,
         },
     })
-    export default class Users extends Vue {
+    export default class ListGroups extends Vue {
         public loaded: boolean = false;
+
         public search: string = '';
         public pagination = {
             rowsPerPage: 10,
@@ -69,33 +62,15 @@
 
         public headers = [
             {
-                text: 'Имя пользователя',
-                value: 'username',
+                text: 'Название',
+                value: 'name',
                 sortable: false,
                 align: 'left',
             },
             {
-                text: 'Фамилия',
-                value: 'secondName',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Имя',
-                value: 'firstName',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Отчество',
-                value: 'lastName',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Права',
-                value: 'roles',
-                sortable: false,
+                text: 'Направление',
+                value: 'semester',
+                sortable: true,
                 align: 'left',
             },
             {
@@ -105,22 +80,17 @@
             },
         ];
 
-
-        public get roles() {
-            return rolesRus;
-        }
-
         get pages() {
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         }
 
-        get users() {
-            return readUsers(this.$store);
+        get groups() {
+            return readGroups(this.$store);
         }
 
         public async mounted() {
-            await dispatchGetUsers(this.$store);
-            this.pagination.totalItems = this.users.length;
+            await dispatchGetGroups(this.$store);
+            this.pagination.totalItems = this.groups.length;
             this.loaded = true;
         }
     }

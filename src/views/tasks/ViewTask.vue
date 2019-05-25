@@ -15,12 +15,12 @@
                                     readonly
                                     type="text">
                             </v-text-field>
-                            <v-text-field
+                            <v-text-area
                                     v-model="description"
                                     label="Описание"
                                     readonly
                                     type="text">
-                            </v-text-field>
+                            </v-text-area>
                             <v-text-field
                                     v-model="deadline"
                                     label="Срок сдачи"

@@ -1,6 +1,6 @@
 <template>
     <v-list v-if="loggedIn === false" dense>
-        <v-list-tile to="/login">
+        <v-list-tile :to="{name: 'login'}">
             <v-list-tile-action>
                 <v-icon>perm_identity</v-icon>
             </v-list-tile-action>
@@ -10,15 +10,7 @@
         </v-list-tile>
     </v-list>
     <v-list v-else dense>
-<!--        <v-list-tile to="/">-->
-<!--            <v-list-tile-action>-->
-<!--                <v-icon>home</v-icon>-->
-<!--            </v-list-tile-action>-->
-<!--            <v-list-tile-content>-->
-<!--                <v-list-tile-title>События</v-list-tile-title>-->
-<!--            </v-list-tile-content>-->
-<!--        </v-list-tile>-->
-        <v-list-tile to="/profile">
+        <v-list-tile :to="{name: 'profile'}">
             <v-list-tile-action>
                 <v-icon>account_circle</v-icon>
             </v-list-tile-action>
@@ -29,7 +21,6 @@
         <AdminMenu v-if="isAdmin"/>
         <StudentMenu v-if="isStudent"/>
         <TutorMenu v-if="iIsTutor"/>
-<!--        <TeacherMenu v-if="isTeacher"/>-->
         <v-list-tile @click.prevent="logout">
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
@@ -43,23 +34,22 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+
     import {
-        readCurrentUserProfile,
         readIsLoggedIn,
         readUserIsAdmin,
         readUserIsStudent,
         readUserIsTeacher,
         readUserIsTutor,
     } from '@/store/auth/getters';
+    import {dispatchLogout} from '@/store/auth/actions';
+
     import AdminMenu from '@/views/menu/AdminMenu.vue';
     import StudentMenu from '@/views/menu/StudentMenu.vue';
     import TutorMenu from '@/views/menu/TutorMenu.vue';
-    import TeacherMenu from '@/views/menu/TeacherMenu.vue';
-    import {dispatchLogout} from '@/store/auth/actions';
 
     @Component({
         components: {
-            TeacherMenu,
             TutorMenu,
             StudentMenu,
             AdminMenu,
@@ -91,7 +81,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

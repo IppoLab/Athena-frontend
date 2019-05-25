@@ -1,21 +1,21 @@
 <template>
     <Loader :loading="!loaded">
         <div slot="content">
-            <ListTableHeader buttonLink="/tutor/tasks/create" :search.sync="search"></ListTableHeader>
+            <ListTableHeader buttonLink="/admin/specialities/create" :search.sync="search"></ListTableHeader>
             <v-data-table
                     :headers="headers"
-                    :items="tasks"
+                    :items="specialities"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search">
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.studentGroup.name }}</td>
-                    <td>{{ props.item.deadline }}</td>
+                    <td>{{ props.item.cipher }}</td>
                     <td class="justify-center layout px-0">
                         <v-tooltip top>
                             <span>Изменить</span>
-                            <v-btn slot="activator" flat :to="{name: 'tutor-tasks-edit', params: {id: props.item.id}}">
+                            <v-btn slot="activator" flat
+                                   :to="{name: 'specialities-edit', params: {id: props.item.id}}">
                                 <v-icon>edit</v-icon>
                             </v-btn>
                         </v-tooltip>
@@ -41,8 +41,8 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readTasks} from '@/store/tasks/getters';
-    import {dispatchGetTasks} from '@/store/tasks/actions';
+    import {readSpecialities} from '@/store/specialities/getters';
+    import {dispatchGetSpecialities} from '@/store/specialities/actions';
     import ListTableHeader from '@/components/ListTableHeader.vue';
     import Loader from '@/components/Loader.vue';
 
@@ -52,8 +52,9 @@
             ListTableHeader,
         },
     })
-    export default class ListTasks extends Vue {
+    export default class ListSpecialities extends Vue {
         public loaded: boolean = false;
+
         public search: string = '';
         public pagination = {
             rowsPerPage: 10,
@@ -68,14 +69,8 @@
                 align: 'left',
             },
             {
-                text: 'Группа',
-                value: 'studentGroup',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Срок сдачи',
-                value: 'deadline',
+                text: 'Шифр',
+                value: 'semester',
                 sortable: true,
                 align: 'left',
             },
@@ -90,13 +85,13 @@
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         }
 
-        get tasks() {
-            return readTasks(this.$store);
+        get specialities() {
+            return readSpecialities(this.$store);
         }
 
         public async mounted() {
-            await dispatchGetTasks(this.$store);
-            this.pagination.totalItems = this.tasks.length;
+            await dispatchGetSpecialities(this.$store);
+            this.pagination.totalItems = this.specialities.length;
             this.loaded = true;
         }
     }

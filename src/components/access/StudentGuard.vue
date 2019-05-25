@@ -1,22 +1,30 @@
 <template>
-    <router-view></router-view>
+    <router-component></router-component>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+
+    import RouterComponent from '@/components/RouterComponent.vue';
+
     import store from '@/store';
     import {readUserIsStudent} from '@/store/auth/getters';
 
-    const studentRouteGuard = async (to, from, next) => {
+
+    async function studentRouteGuard(to, from, next) {
         if (!readUserIsStudent(store)) {
             next(false);
         } else {
             next();
         }
-    };
+    }
 
-    @Component
-    export default class Tutor extends Vue {
+    @Component({
+        components: {
+            RouterComponent,
+        },
+    })
+    export default class StudentGuard extends Vue {
         public async beforeRouteEnter(to, from, next) {
             await studentRouteGuard(to, from, next);
         }

@@ -44,7 +44,7 @@ export const actions = {
         }
     },
     actionRouteEditGroup: async (context: GroupsContext, payload: string) => {
-        router.push({name: 'admin-groups-edit', params: {id: payload}});
+        router.push({name: 'groups-edit', params: {id: payload}});
     },
     actionChangeGroupById: async (
         context: GroupsContext,

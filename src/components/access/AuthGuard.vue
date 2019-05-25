@@ -1,14 +1,18 @@
 <template>
-    <router-view></router-view>
+    <router-component></router-component>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+
+    import RouterComponent from '@/components/RouterComponent.vue';
+
     import store from '@/store';
     import {readIsLoggedIn} from '@/store/auth/getters';
     import {dispatchCheckLoggedIn} from '@/store/auth/actions';
 
-    const startRouteGuard = async (to, from, next) => {
+
+    async function authRouteGuard(to, from, next) {
         await dispatchCheckLoggedIn(store);
         const userLoggedIn = readIsLoggedIn(store);
         if (to.path !== '/login' && !userLoggedIn) {
@@ -18,17 +22,20 @@
         } else {
             next();
         }
-    };
+    }
 
-
-    @Component
-    export default class Start extends Vue {
+    @Component({
+        components: {
+            RouterComponent,
+        },
+    })
+    export default class AuthGuard extends Vue {
         public async beforeRouteEnter(to, from, next) {
-            await startRouteGuard(to, from, next);
+            await authRouteGuard(to, from, next);
         }
 
         public async beforeRouteUpdate(to, from, next) {
-            await startRouteGuard(to, from, next);
+            await authRouteGuard(to, from, next);
         }
     }
 </script>

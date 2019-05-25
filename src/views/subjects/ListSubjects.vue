@@ -1,22 +1,21 @@
 <template>
     <Loader :loading="!loaded">
         <div slot="content">
-            <ListTableHeader buttonLink="/tutor/tasks/create" :search.sync="search"></ListTableHeader>
+            <ListTableHeader buttonLink="/admin/subjects/create" :search.sync="search"></ListTableHeader>
             <v-data-table
                     :headers="headers"
-                    :items="reports"
+                    :items="subjects"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search">
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.status }}</td>
+                    <td>{{ props.item.semester }}</td>
                     <td class="justify-center layout px-0">
                         <v-tooltip top>
                             <span>Изменить</span>
-                            <v-btn slot="activator" flat
-                                   :to="{name: 'tutor-view-report', params: {id: props.item.id}}">
-                                <v-icon>remove_red_eye</v-icon>
+                            <v-btn slot="activator" flat :to="{name: 'subjects-edit', params: {id: props.item.id}}">
+                                <v-icon>edit</v-icon>
                             </v-btn>
                         </v-tooltip>
                     </td>
@@ -41,11 +40,9 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import {readSubjects} from '@/store/subjects/getters';
+    import {dispatchGetSubjects} from '@/store/subjects/actions';
     import ListTableHeader from '@/components/ListTableHeader.vue';
-    import {readReports} from '@/store/reports/getters';
-    import {dispatchGetReports} from '@/store/reports/actions';
-    import {IReport} from '@/models';
-    import {statusRus} from '@/configs/constants';
     import Loader from '@/components/Loader.vue';
 
     @Component({
@@ -54,7 +51,7 @@
             ListTableHeader,
         },
     })
-    export default class ListReports extends Vue {
+    export default class Subjects extends Vue {
         public loaded: boolean = false;
         public search: string = '';
         public pagination = {
@@ -70,9 +67,9 @@
                 align: 'left',
             },
             {
-                text: 'Статус',
-                value: 'status',
-                sortable: false,
+                text: 'Семестр',
+                value: 'semester',
+                sortable: true,
                 align: 'left',
             },
             {
@@ -86,18 +83,13 @@
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         }
 
-        get reports() {
-            return readReports(this.$store).map((report: IReport) => {
-                return {
-                    ...report,
-                    status: statusRus[report.status],
-                };
-            });
+        get subjects() {
+            return readSubjects(this.$store);
         }
 
         public async mounted() {
-            await dispatchGetReports(this.$store);
-            this.pagination.totalItems = this.reports.length;
+            await dispatchGetSubjects(this.$store);
+            this.pagination.totalItems = this.subjects.length;
             this.loaded = true;
         }
     }

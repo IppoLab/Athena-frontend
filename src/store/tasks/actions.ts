@@ -67,10 +67,10 @@ export const actions = {
         }
     },
     actionRouteTaskEdit: async (context: TasksContext, payload: string) => {
-        router.push({name: 'tutor-tasks-edit', params: {id: payload}});
+        router.push({name: 'tasks-edit', params: {id: payload}});
     },
     actionRouteTaskView: async (context: TasksContext, payload: string) => {
-        router.push({name: 'student-view-task', params: {id: payload}});
+        router.push({name: 'tasks-view', params: {id: payload}});
     },
 };
 

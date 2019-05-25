@@ -1,22 +1,30 @@
 <template>
-    <router-view></router-view>
+    <router-component></router-component>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {readUserIsAdmin} from '@/store/auth/getters';
-    import store from '@/store';
 
-    const adminRouteGuard = async (to, from, next) => {
+    import RouterComponent from '@/components/RouterComponent.vue';
+
+    import store from '@/store';
+    import {readUserIsAdmin} from '@/store/auth/getters';
+
+
+    async function adminRouteGuard(to, from, next) {
         if (!readUserIsAdmin(store)) {
             next(false);
         } else {
             next();
         }
-    };
+    }
 
-    @Component
-    export default class Admin extends Vue {
+    @Component({
+        components: {
+            RouterComponent,
+        },
+    })
+    export default class AdminGuard extends Vue {
         public async beforeRouteEnter(to, from, next) {
             await adminRouteGuard(to, from, next);
         }

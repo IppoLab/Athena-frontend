@@ -98,7 +98,7 @@ export const actions = {
         }
     },
     actionRouteUserEdit: async (context: UsersContext, payload: string) => {
-        router.push({name: 'admin-users-edit', params: {id: payload}});
+        router.push({name: 'users-edit', params: {id: payload}});
     },
 };
 

@@ -8,203 +8,180 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/',
-            component: () => import('@/views/Start.vue'),
+            path: '',
+            component: () => import('@/components/access/AuthGuard.vue'),
             children: [
                 {
-                    path: '/',
-                    component: () => import('@/views/Profile.vue'),
+                    path: '',
+                    name: 'home',
+                    redirect: 'profile',
                 },
                 {
                     path: 'login',
+                    name: 'login',
                     component: () => import('@/views/Login.vue'),
                 },
                 {
                     path: 'profile',
+                    name: 'profile',
                     component: () => import('@/views/Profile.vue'),
                 },
                 {
                     path: 'admin',
-                    component: () => import('@/views/admin/Admin.vue'),
+                    component: () => import('@/components/access/AdminGuard.vue'),
                     redirect: 'admin/users',
                     children: [
                         {
                             path: 'settings',
-                            component: () => import('@/views/admin/Settings.vue'),
+                            name: 'settings',
+                            component: () => import('@/views/Settings.vue'),
                         },
                         {
                             path: 'users',
                             redirect: 'users/all',
-                            component: () => import('@/views/admin/users/Users.vue'),
+                            component: () => import('@/components/RouterComponent.vue'),
                             children: [
                                 {
                                     path: 'all',
-                                    component: () => import('@/views/admin/users/ListUsers.vue'),
+                                    name: 'users-all',
+                                    component: () => import('@/views/users/ListUsers.vue'),
                                 },
                                 {
-                                    path: 'create',
-                                    component: () => import('@/views/admin/users/CreateUser.vue'),
+                                    path: 'new',
+                                    name: 'users-new',
+                                    component: () => import('@/views/users/CreateUser.vue'),
                                 },
                                 {
-                                    path: 'edit/:id',
-                                    name: 'admin-users-edit',
-                                    component: () => import('@/views/admin/users/EditUser.vue'),
+                                    path: ':id',
+                                    name: 'users-view',
+                                    component: () => import('@/views/users/ViewUser.vue'),
+                                },
+                                {
+                                    path: ':id/edit',
+                                    name: 'users-edit',
+                                    component: () => import('@/views/users/EditUser.vue'),
                                 },
                             ],
                         },
                         {
                             path: 'subjects',
-                            component: () => import('@/views/admin/subjects/Subjects.vue'),
+                            component: () => import('@/components/RouterComponent.vue'),
                             redirect: 'subjects/all',
                             children: [
                                 {
                                     path: 'all',
-                                    component: () => import('@/views/admin/subjects/ListSubjects.vue'),
+                                    name: 'subjects-all',
+                                    component: () => import('@/views/subjects/ListSubjects.vue'),
                                 },
                                 {
-                                    path: 'create',
-                                    component: () => import('@/views/admin/subjects/CreateSubject.vue'),
+                                    path: 'new',
+                                    name: 'subjects-new',
+                                    component: () => import('@/views/subjects/CreateSubject.vue'),
                                 },
                                 {
-                                    path: 'edit/:id',
-                                    name: 'admin-subjects-edit',
-                                    component: () => import('@/views/admin/subjects/EditSubject.vue'),
+                                    path: ':id/edit',
+                                    name: 'subjects-edit',
+                                    component: () => import('@/views/subjects/EditSubject.vue'),
                                 },
                             ],
                         },
                         {
                             path: 'specialities',
-                            component: () => import('@/views/admin/specialities/Specialities.vue'),
+                            component: () => import('@/components/RouterComponent.vue'),
                             redirect: 'specialities/all',
                             children: [
                                 {
                                     path: 'all',
-                                    component: () => import('@/views/admin/specialities/ListSpecialities.vue'),
+                                    name: 'specialities-all',
+                                    component: () => import('@/views/specialities/ListSpecialities.vue'),
                                 },
                                 {
-                                    path: 'create',
-                                    component: () => import('@/views/admin/specialities/CreateSpeciality.vue'),
+                                    path: 'new',
+                                    name: 'specialities-new',
+                                    component: () => import('@/views/specialities/CreateSpeciality.vue'),
                                 },
                                 {
-                                    path: 'edit/:id',
-                                    name: 'admin-specialities-edit',
-                                    component: () => import('@/views/admin/specialities/EditSpeciality.vue'),
+                                    path: ':id/edit',
+                                    name: 'specialities-edit',
+                                    component: () => import('@/views/specialities/EditSpeciality.vue'),
                                 },
                             ],
                         },
                         {
                             path: 'groups',
-                            component: () => import('@/views/admin/groups/Groups.vue'),
+                            component: () => import('@/components/RouterComponent.vue'),
                             redirect: 'groups/all',
                             children: [
                                 {
                                     path: 'all',
-                                    component: () => import('@/views/admin/groups/ListGroups.vue'),
+                                    name: 'groups-all',
+                                    component: () => import('@/views/groups/ListGroups.vue'),
                                 },
                                 {
-                                    path: 'create',
-                                    component: () => import('@/views/admin/groups/CreateGroup.vue'),
+                                    path: 'new',
+                                    name: 'groups-new',
+                                    component: () => import('@/views/groups/CreateGroup.vue'),
                                 },
                                 {
-                                    path: 'edit/:id',
-                                    name: 'admin-groups-edit',
-                                    component: () => import('@/views/admin/groups/EditGroup.vue'),
+                                    path: ':id/edit',
+                                    name: 'groups-edit',
+                                    component: () => import('@/views/groups/EditGroup.vue'),
                                 },
                             ],
                         },
                     ],
                 },
                 {
-                    path: 'tutor',
-                    component: () => import('@/views/tutor/Tutor.vue'),
-                    redirect: 'tutor/tasks',
+                    path: 'reports',
+                    redirect: 'reports/all',
+                    component: () => import('@/components/RouterComponent.vue'),
                     children: [
                         {
-                            path: 'reports',
-                            redirect: 'reports/all',
+                            path: 'all',
+                            name: 'reports-all',
+                            component: () => import('@/views/reports/ListReports.vue'),
                         },
                         {
-                            path: 'reports/all',
-                            component: () => import('@/views/tutor/tasks/reports/ListReports.vue'),
+                            path: ':id',
+                            name: 'reports-view',
+                            component: () => import('@/views/reports/ViewReport.vue'),
                         },
                         {
-                            path: 'reports/:id',
-                            name: 'tutor-view-report',
-                            component: () => import('@/views/tutor/tasks/reports/CheckReport.vue'),
+                            path: 'new',
+                            name: 'reports-new',
+                            component: () => import('@/views/reports/CreateReport.vue'),
                         },
                         {
-                            path: 'tasks',
-                            component: () => import('@/views/tutor/tasks/Tasks.vue'),
-                            redirect: 'tasks/all',
-                            children: [
-                                {
-                                    path: 'all',
-                                    component: () => import('@/views/tutor/tasks/ListTasks.vue'),
-                                },
-                                {
-                                    path: 'create',
-                                    component: () => import('@/views/tutor/tasks/CreateTask.vue'),
-                                },
-                                {
-                                    path: 'edit/:id',
-                                    name: 'tutor-tasks-edit',
-                                    component: () => import('@/views/tutor/tasks/EditTask.vue'),
-                                },
-                            ],
+                            path: 'change',
+                            name: 'reports-edit',
+                            component: () => import('@/views/reports/EditReport.vue'),
                         },
                     ],
                 },
                 {
-                    path: 'student',
-                    component: () => import('@/views/student/Student.vue'),
-                    redirect: 'student/tasks',
+                    path: 'tasks',
+                    component: () => import('@/components/RouterComponent.vue'),
+                    redirect: 'tasks/all',
                     children: [
                         {
-                            path: 'reports',
-                            component: () => import('@/views/student/tasks/reports/ListReports.vue'),
+                            path: 'all',
+                            name: 'tasks-all',
+                            component: () => import('@/views/tasks/ListTasks.vue'),
                         },
                         {
-                            path: 'tasks',
-                            component: () => import('@/views/student/tasks/Tasks.vue'),
-                            redirect: 'tasks/all',
-                            children: [
-                                {
-                                    path: 'all',
-                                    component: () => import('@/views/student/tasks/ListTasks.vue'),
-                                },
-                                {
-                                    path: ':id',
-                                    name: 'student-view-task',
-                                    component: () => import('@/views/student/tasks/ViewTask.vue'),
-                                },
-                                {
-                                    path: ':id/report',
-                                    component: () => import('@/views/student/tasks/reports/Reports.vue'),
-                                    children: [
-                                        {
-                                            path: '',
-                                            name: 'student-view-report',
-                                            component: () => {
-                                                return import('@/views/student/tasks/reports/ViewReport.vue');
-                                            },
-                                        },
-                                        {
-                                            path: 'new',
-                                            name: 'student-new-report',
-                                            component: () => {
-                                                return import('@/views/student/tasks/reports/CreateReport.vue');
-                                            },
-                                        },
-                                        {
-                                            path: 'change',
-                                            name: 'student-edit-report',
-                                            component: () => {
-                                                return import('@/views/student/tasks/reports/EditReport.vue');
-                                            },
-                                        },
-                                    ],
-                                },
-                            ],
+                            path: 'new',
+                            name: 'tasks-new',
+                            component: () => import('@/views/tasks/CreateTask.vue'),
+                        },
+                        {
+                            path: ':id',
+                            name: 'tasks-view',
+                            component: () => import('@/views/tasks/ViewTask.vue'),
+                        },
+                        {
+                            path: ':id/edit',
+                            name: 'tasks-edit',
+                            component: () => import('@/views/tasks/EditTask.vue'),
                         },
                     ],
                 },
@@ -212,7 +189,8 @@ export default new Router({
         },
         {
             path: '/*',
-            redirect: '/',
+            name: 'not-found',
+            component: () => import('@/views/NotFound.vue'),
         },
     ],
 });
