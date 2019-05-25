@@ -1,7 +1,7 @@
 <template>
     <loader :loading="!loaded">
         <div slot="content">
-            <list-table-header buttonLink="/admin/users/create" :search.sync="search"></list-table-header>
+            <list-table-header :buttonLink="{name: 'users-new'}" :search.sync="search"></list-table-header>
             <v-data-table
                     :headers="headers"
                     :items="users"
@@ -17,7 +17,7 @@
                         </span>
                     </td>
                     <td class="justify-center layout px-0">
-                        <v-btn slot="activator" flat :to="{name: 'users-view', params: {id: props.item.id}}">
+                        <v-btn slot="activator" flat :to="{name: 'users-edit', params: {id: props.item.id}}">
                             <v-icon>remove_red_eye</v-icon>
                         </v-btn>
                     </td>
