@@ -116,8 +116,8 @@
     import {dispatchGetSubjects} from '@/store/subjects/actions';
     import {readGroups} from '@/store/groups/getters';
     import {readSubjects} from '@/store/subjects/getters';
-    import {ISubject, ISubjectInSelect} from '@/models/subjects';
-    import {IGroup} from '@/models';
+    import {ISubject} from '@/models/interfaces/subjects';
+    import {IGroup, ListElementSubject} from '@/models';
     import {dispatchCreateTask} from '@/store/tasks/actions';
     import Loader from '@/components/Loader.vue';
 
@@ -132,7 +132,7 @@
         public file: File | null = null;
         public attachment: File | null = null;
         public groupsForTask: IGroup[] = [];
-        public subject: ISubjectInSelect | null = null;
+        public subject: ListElementSubject | null = null;
         public loaded: boolean = false;
 
 

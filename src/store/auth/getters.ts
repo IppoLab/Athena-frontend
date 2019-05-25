@@ -1,7 +1,7 @@
 import {getStoreAccessors} from 'typesafe-vuex';
 
 import {adminRoleName, studentRoleName, teacherRoleName, tutorRoleName} from '@/configs/constants';
-import {userHasRole} from '@/helpers/models';
+import {userHasRole} from '@/helpers/general';
 import {State} from '@/store/state';
 
 import {AuthState} from './state';

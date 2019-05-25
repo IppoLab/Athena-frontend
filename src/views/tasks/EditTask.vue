@@ -16,13 +16,15 @@
                                     required
                                     type="text">
                             </v-text-field>
-                            <v-text-field
+                            <v-textarea
                                     v-model="description"
+                                    auto-grow
+                                    rows="1"
                                     label="Описание"
                                     :rules="[() => !!description || 'Поле обязательно']"
                                     required
                                     type="text">
-                            </v-text-field>
+                            </v-textarea>
                             <v-dialog
                                     ref="dialog"
                                     v-model="modal"
@@ -117,8 +119,8 @@
     import {dispatchGetSubjects} from '@/store/subjects/actions';
     import {readGroupById, readGroups} from '@/store/groups/getters';
     import {readSubjectById, readSubjects} from '@/store/subjects/getters';
-    import {ISubject, ISubjectInSelect} from '@/models/subjects';
-    import {IGroup} from '@/models';
+    import {ISubject} from '@/models/interfaces/subjects';
+    import {IGroup, ListElementSubject} from '@/models';
     import {dispatchGetTaskById, dispatchUpdateTaskById} from '@/store/tasks/actions';
     import Loader from '@/components/Loader.vue';
     import {readTaskById} from '@/store/tasks/getters';
@@ -132,10 +134,10 @@
         public name: string = '';
         public description: string = '';
         public deadline: string = '';
-        public file?: File;
-        public attachment?: File;
+        public file: File | null = null;
+        public attachment: File | null = null;
         public group: IGroup | null = null;
-        public subject: ISubjectInSelect | null = null;
+        public subject: ListElementSubject | null = null;
         public loaded: boolean = false;
 
 
@@ -184,8 +186,8 @@
             this.deadline = '';
             this.group = null;
             this.subject = null;
-            this.file = undefined;
-            this.attachment = undefined;
+            this.file = null;
+            this.attachment = null;
         }
 
         public get groups() {
@@ -225,8 +227,8 @@
                     subject: this.subject!.id,
                     studentGroup: this.group!.id,
                     deadline: this.deadline,
-                    file: this.file,
-                    attachment: this.attachment,
+                    file: this.file !== null ? this.file as File : undefined,
+                    attachment: this.attachment !== null ? this.attachment as File : undefined,
                 },
             });
         }

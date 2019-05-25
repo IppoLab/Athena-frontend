@@ -119,7 +119,7 @@
     import {IGroup} from '@/models';
     import {readGroups} from '@/store/groups/getters';
     import {readSubjects} from '@/store/subjects/getters';
-    import {ISubject} from '@/models/subjects';
+    import {ISubject} from '@/models/interfaces/subjects';
 
     @Component
     export default class CreateUser extends Vue {

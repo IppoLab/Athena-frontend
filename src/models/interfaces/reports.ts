@@ -1,5 +1,4 @@
-import {ITask} from './tasks';
-import {IUserProfile} from './users';
+import {ITask, IUserProfile} from '@/models';
 
 export interface IReportBase {
     name: string;

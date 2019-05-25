@@ -1,4 +1,4 @@
-import {ISubject} from './subjects';
+import {ISubject} from '@/models';
 
 export interface ITeacherProfile {
     subjects: ISubject[];
@@ -13,5 +13,3 @@ export interface ITeacherProfileInUpdate extends ITeacherProfileInAPI {
 
 export interface ITeacherProfileInResponse extends ITeacherProfileInAPI {
 }
-
-

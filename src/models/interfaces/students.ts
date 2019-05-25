@@ -1,4 +1,4 @@
-import {IGroup} from './groups';
+import {IGroup} from '@/models';
 
 export interface IStudentProfileBase {
     cipher: string;

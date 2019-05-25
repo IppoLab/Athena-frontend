@@ -1,5 +1,4 @@
-import {IStudentProfile} from './students';
-import {ITeacherProfile} from './teachers';
+import {IStudentProfile, ITeacherProfile} from '@/models';
 
 export interface IUserInLogin {
     username: string;
@@ -29,4 +28,3 @@ export interface IUserProfileInCreate extends IUserProfileBase {
 
 export interface IUserProfileInUpdate extends IUserProfileBase {
 }
-

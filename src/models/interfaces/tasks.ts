@@ -1,5 +1,4 @@
-import {ISubject} from './subjects';
-import {IGroup} from './groups';
+import {IGroup, ISubject} from '@/models';
 
 export interface ITaskBase {
     name: string;

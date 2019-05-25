@@ -1,4 +1,4 @@
-import {ISpeciality} from './specialities';
+import {ISpeciality} from '@/models';
 
 export interface IGroupBase {
     name: string;

@@ -15,12 +15,14 @@
                                     readonly
                                     type="text">
                             </v-text-field>
-                            <v-text-area
+                            <v-textarea
                                     v-model="description"
+                                    auto-grow
+                                    rows="1"
                                     label="Описание"
                                     readonly
                                     type="text">
-                            </v-text-area>
+                            </v-textarea>
                             <v-text-field
                                     v-model="deadline"
                                     label="Срок сдачи"
@@ -60,11 +62,11 @@
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
     import UploadButton from '@/components/UploadButton.vue';
-    import {ListElementSubject} from '@/models/subjects';
     import {dispatchGetTaskById} from '@/store/tasks/actions';
     import Loader from '@/components/Loader.vue';
     import {readTaskById} from '@/store/tasks/getters';
     import {dispatchRouteReportCreateOrEdit} from '@/store/reports/actions';
+    import {ListElementSubject} from '@/models';
 
     @Component({
         components: {Loader, UploadButton},
@@ -88,7 +90,7 @@
                 this.name = task.name;
                 this.description = task.description;
                 this.deadline = task.deadline;
-                this.subject = new ListElementSubject(task.subject).display;
+                this.subject = ListElementSubject.fromSubject(task.subject).display;
                 this.file = task.file;
                 this.attachment = task.attachment;
 

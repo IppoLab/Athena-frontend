@@ -1,19 +1,24 @@
 <template>
     <div>
         <v-snackbar auto-height :color="currentNotificationColor" v-model="show">
-            <v-progress-circular class="ma-2" indeterminate v-show="showProgress"></v-progress-circular>
+            <v-progress-circular class="ma-2" indeterminate v-show="showProgress"/>
             {{ currentNotificationContent }}
-            <v-btn flat @click.native="close">Закрыть</v-btn>
+            <v-btn flat @click.native="close">
+                <slot>
+                    Закрыть
+                </slot>
+            </v-btn>
         </v-snackbar>
     </div>
 </template>
+
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
 
     import {IAppNotification} from '@/models';
 
-    import {commitRemoveNotification} from '@/store/app/mutations';
     import {readFirstNotification} from '@/store/app/getters';
+    import {commitRemoveNotification} from '@/store/app/mutations';
     import {dispatchRemoveNotification} from '@/store/app/actions';
 
     @Component

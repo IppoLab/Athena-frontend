@@ -3,7 +3,7 @@ import {ActionContext} from 'vuex';
 
 import {State} from '@/store/state';
 import {api} from '@/helpers/api';
-import {ITask, ITaskInCreate, ITaskInResponse, ITaskInUpdate} from '@/models/tasks';
+import {ITask, ITaskInCreate, ITaskInResponse, ITaskInUpdate} from '@/models/interfaces/tasks';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {readGroupById} from '@/store/groups/getters';
 import {readSubjectById} from '@/store/subjects/getters';
