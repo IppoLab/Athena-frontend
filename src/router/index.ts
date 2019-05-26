@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import {adminRouteGuard, authRouteGuard} from './guards';
+
 Vue.use(Router);
 
 export default new Router({
@@ -9,7 +11,8 @@ export default new Router({
     routes: [
         {
             path: '',
-            component: () => import('@/components/access/AuthGuard.vue'),
+            component: () => import('@/components/RouterComponent.vue'),
+            beforeEnter: authRouteGuard,
             children: [
                 {
                     path: '',
@@ -28,7 +31,8 @@ export default new Router({
                 },
                 {
                     path: 'admin',
-                    component: () => import('@/components/access/AdminGuard.vue'),
+                    component: () => import('@/components/RouterComponent.vue'),
+                    beforeEnter: adminRouteGuard,
                     redirect: 'admin/users',
                     children: [
                         {
@@ -188,9 +192,13 @@ export default new Router({
             ],
         },
         {
-            path: '/*',
+            path: '/404',
             name: 'not-found',
             component: () => import('@/views/NotFound.vue'),
+        },
+        {
+            path: '*',
+            redirect: '/404',
         },
     ],
 });
