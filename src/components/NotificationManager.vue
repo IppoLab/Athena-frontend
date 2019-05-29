@@ -3,7 +3,20 @@
         <v-snackbar auto-height :color="currentNotificationColor" v-model="show">
             <v-progress-circular class="ma-2" indeterminate v-show="showProgress"/>
             {{ currentNotificationContent }}
-            <v-btn flat @click.native="close">
+            <span v-if="currentNotificationActions.length">
+                <v-btn
+                        v-for="(action, i) in currentNotificationActions"
+                        :key="i"
+
+                        @click.native="action.action"
+
+                        flat>
+                    <slot>
+                        {{action.name}}
+                    </slot>
+                </v-btn>
+            </span>
+            <v-btn v-else flat @click.native="close">
                 <slot>
                     Закрыть
                 </slot>
@@ -15,7 +28,7 @@
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
 
-    import {IAppNotification} from '@/models';
+    import {IAppNotification, INotificationAction} from '@/models';
 
     import {readFirstNotification} from '@/store/app/getters';
     import {commitRemoveNotification} from '@/store/app/mutations';
@@ -38,6 +51,22 @@
 
         public get currentNotificationColor() {
             return this.currentNotification && this.currentNotification.color || 'info';
+        }
+
+        public get currentNotificationActions() {
+            if (this.currentNotification && this.currentNotification.actions) {
+                return this.currentNotification.actions.map((action: INotificationAction) => {
+                    return {
+                        name: action.name,
+                        action: async () => {
+                            await action.action();
+                            await this.close();
+                        },
+                    } as INotificationAction;
+                });
+            } else {
+                return [];
+            }
         }
 
         public async hide() {
