@@ -32,7 +32,7 @@ export const actions = {
         }
     },
     actionRouteSubjectEdit: async (context: SubjectsContext, payload: string) => {
-        router.push({name: 'admin-subjects-edit', params: {id: payload}});
+        router.push({name: 'subjects-edit', params: {id: payload}});
     },
     actionGetSubjects: async (context: SubjectsContext) => {
         try {

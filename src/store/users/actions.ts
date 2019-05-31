@@ -2,7 +2,7 @@ import {ActionContext} from 'vuex';
 import {getStoreAccessors} from 'typesafe-vuex';
 
 import router from '@/router';
-import {userHasRole} from '@/helpers/models';
+import {userHasRole} from '@/helpers/general';
 import {api, loaders} from '@/helpers';
 import {studentRoleName, teacherRoleName} from '@/configs/constants';
 import {IStudentProfileInUpdate, ITeacherProfileInAPI, IUserProfileInCreate, IUserProfileInUpdate} from '@/models';
@@ -98,7 +98,7 @@ export const actions = {
         }
     },
     actionRouteUserEdit: async (context: UsersContext, payload: string) => {
-        router.push({name: 'admin-users-edit', params: {id: payload}});
+        router.push({name: 'users-edit', params: {id: payload}});
     },
 };
 

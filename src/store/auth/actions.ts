@@ -111,7 +111,7 @@ export const actions = {
     },
     actionRouteLoggedIn: (context: AuthContext) => {
         if (router.currentRoute.path === '/login') {
-            router.push('/upload');
+            router.push({name: 'home'});
         }
     },
     actionRouteLogout: (context: AuthContext) => {

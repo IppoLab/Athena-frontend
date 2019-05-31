@@ -5,8 +5,12 @@
                 <v-layout align-center justify-center>
                     <v-flex>
                         <div class="text-xs-center">
-                            <div class="headline my-5">Загрузка...</div>
-                            <v-progress-circular size="100" indeterminate color="primary"></v-progress-circular>
+                            <div class="headline my-5">
+                                <slot name="loading-text">
+                                    Загрузка...
+                                </slot>
+                            </div>
+                            <v-progress-circular size="100" indeterminate color="primary"/>
                         </div>
                     </v-flex>
                 </v-layout>

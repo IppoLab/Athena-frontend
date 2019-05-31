@@ -1,12 +1,20 @@
 <template>
     <div>
-        <v-btn :color="color" @click="trigger"><slot name="content">Выберите файл</slot></v-btn>
-        <input :multiple="multiple" class="visually-hidden" type="file" :accept="acceptable" v-on:change="files" ref="fileInput">
+        <v-btn :color="color" @click="trigger">
+            <slot name="content">Выберите файл</slot>
+        </v-btn>
+        <input
+            :multiple="multiple"
+            class="visually-hidden"
+            type="file"
+            :accept="acceptable"
+            v-on:change="files"
+            ref="fileInput">
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+    import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
 
     @Component
     export default class UploadButton extends Vue {
