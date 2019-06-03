@@ -41,15 +41,6 @@
                     <v-list-tile-title>Группы</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-divider></v-divider>
-            <v-list-tile :to="{name: 'settings'}">
-                <v-list-tile-action>
-                    <v-icon>settings</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Настройки</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
         </v-list-group>
     </v-list>
 </template>

@@ -14,7 +14,6 @@
                         <v-toolbar-side-icon @click.stop="showDrawer = !showDrawer"></v-toolbar-side-icon>
                         <v-toolbar-title>{{appName}}</v-toolbar-title>
                         <v-spacer></v-spacer>
-                        <ThemeSwitcher class="mt-4"></ThemeSwitcher>
                     </v-toolbar>
                     <router-view/>
                     <NotificationManager></NotificationManager>

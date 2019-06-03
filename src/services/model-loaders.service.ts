@@ -13,11 +13,11 @@ import {
 } from '@/models';
 import {studentRoleName, teacherRoleName} from '@/configs/constants';
 
-import {api} from './api';
+import {apiService} from './api.service';
 
 export const loaders = {
     loadUserProfileById: async (userId: string) => {
-        const user: IUserProfile = (await api.getUserProfileById(userId)).data;
+        const user: IUserProfile = (await apiService.getUserProfileById(userId)).data;
         let student: IStudentProfile | undefined;
         let teacher: ITeacherProfile | undefined;
 
@@ -35,7 +35,7 @@ export const loaders = {
         } as IUserProfile;
     },
     loadStudentProfileById: async (userId: string) => {
-        const student = (await api.getStudentProfileById(userId)).data;
+        const student = (await apiService.getStudentProfileById(userId)).data;
         const group = student.studentGroup !== null ? await loaders.loadGroupById(student.studentGroup) : undefined;
 
         return {
@@ -44,8 +44,8 @@ export const loaders = {
         } as IStudentProfile;
     },
     loadGroupById: async (groupId: string) => {
-        const group = (await api.getGroupById(groupId)).data;
-        const speciality = (await api.getSpecialityById(group.speciality)).data;
+        const group = (await apiService.getGroupById(groupId)).data;
+        const speciality = (await apiService.getSpecialityById(group.speciality)).data;
 
         return {
             ...group,
@@ -53,16 +53,16 @@ export const loaders = {
         } as IGroup;
     },
     loadTeacherProfileById: async (userId: string) => {
-        const teacher = (await api.getTeacherProfileById(userId)).data;
-        const subjects = (await api.getSubjects()).data;
+        const teacher = (await apiService.getTeacherProfileById(userId)).data;
+        const subjects = (await apiService.getSubjects()).data;
 
         return {
             subjects: subjects.filter((subject: ISubjectInResponse) => teacher.subjects.includes(subject.id)),
         };
     },
     loadAllGroups: async () => {
-        const specialities = (await api.getSpecialities()).data;
-        const groups = (await api.getGroups()).data;
+        const specialities = (await apiService.getSpecialities()).data;
+        const groups = (await apiService.getGroups()).data;
 
         return groups.map((group: IGroupInResponse) => {
             return {
@@ -74,9 +74,9 @@ export const loaders = {
         }) as IGroup[];
     },
     loadAllTasks: async () => {
-        const tasks = (await api.getTasks()).data;
+        const tasks = (await apiService.getTasks()).data;
         const groups = await loaders.loadAllGroups();
-        const subjects = (await api.getSubjects()).data;
+        const subjects = (await apiService.getSubjects()).data;
 
         return tasks.map((task: ITaskInResponse) => {
             return {
@@ -87,9 +87,9 @@ export const loaders = {
         }) as ITask[];
     },
     loadTaskById: async (taskId: string) => {
-        const task = (await api.getTaskById(taskId)).data;
+        const task = (await apiService.getTaskById(taskId)).data;
         const studentGroup = await loaders.loadGroupById(task.studentGroup);
-        const subject = (await api.getSubjectById(task.subject)).data;
+        const subject = (await apiService.getSubjectById(task.subject)).data;
 
         return {
             ...task,
@@ -98,15 +98,15 @@ export const loaders = {
         } as ITask;
     },
     loadReportByTaskId: async (taskId: string) => {
-        const report = (await api.getStudentReportForTask(taskId)).data;
+        const report = (await apiService.getStudentReportForTask(taskId)).data;
         return _loadReportRelatedParts(report);
     },
     loadReportById: async (reportId) => {
-        const report = (await api.getReportById(reportId)).data;
+        const report = (await apiService.getReportById(reportId)).data;
         return _loadReportRelatedParts(report);
     },
     loadAllReports: async () => {
-        const reports = (await api.getReports()).data;
+        const reports = (await apiService.getReports()).data;
         return reports.map((report: IReportInResponse) => {
             return {
                 ...report,

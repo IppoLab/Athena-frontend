@@ -2,7 +2,7 @@ import {ActionContext} from 'vuex';
 import {getStoreAccessors} from 'typesafe-vuex';
 
 import router from '@/router';
-import {api, loaders} from '@/helpers';
+import {apiService, loaders} from '@/services';
 import {IGroupInCreate, IGroupInUpdate} from '@/models';
 import {State} from '@/store/state';
 import {commitSetGroup, commitSetGroups} from '@/store/groups/mutations';
@@ -33,7 +33,7 @@ export const actions = {
             const loadingNotification = {content: 'Создание группы', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = (await api.createGroup(payload)).data;
+            const response = (await apiService.createGroup(payload)).data;
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Группа создана', color: 'success'});
@@ -54,7 +54,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение группы', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            await api.changeGroupById(payload.id, payload.group);
+            await apiService.changeGroupById(payload.id, payload.group);
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Группа изменена', color: 'success'});

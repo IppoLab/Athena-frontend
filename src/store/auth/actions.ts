@@ -3,7 +3,7 @@ import {getStoreAccessors} from 'typesafe-vuex';
 
 import router from '@/router';
 import {IUserInLogin} from '@/models';
-import {api, getLocalTokens, removeLocalTokens, saveLocalTokens, setAxiosAuthToken} from '@/helpers';
+import {apiService, getLocalTokens, removeLocalTokens, saveLocalTokens, setAxiosAuthToken} from '@/services';
 import {State} from '@/store/state';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
@@ -23,7 +23,7 @@ export const actions = {
             const loadingNotification = {content: 'Вход', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = await api.loginGetToken(payload);
+            const response = await apiService.loginGetToken(payload);
             const auth = response.data;
 
             saveLocalTokens(auth);
@@ -56,10 +56,10 @@ export const actions = {
 
             if (accessToken) {
                 try {
-                    await api.verifyToken(accessToken);
+                    await apiService.verifyToken(accessToken);
                 } catch (e) {
                     try {
-                        const auth = (await api.refreshToken(readRefreshToken(context))).data;
+                        const auth = (await apiService.refreshToken(readRefreshToken(context))).data;
                         saveLocalTokens(auth);
                         commitSetAuthTokens(context, auth);
                         await dispatchCheckLoggedIn(context);
@@ -72,7 +72,7 @@ export const actions = {
                 setAxiosAuthToken(accessToken);
 
                 try {
-                    const response = await api.getMe();
+                    const response = await apiService.getMe();
                     commitSetLoggedIn(context, true);
                     await dispatchGetUserById(context, response.data.id);
                     commitSetCurrentUserProfile(context, readUserProfileById(context)(response.data.id)!);
@@ -86,7 +86,7 @@ export const actions = {
     },
     actionGetCurrentUserProfile: async (context: AuthContext) => {
         try {
-            const response = await api.getMe();
+            const response = await apiService.getMe();
             if (response.data) {
                 await dispatchGetUserById(context, response.data.id);
                 commitSetCurrentUserProfile(context, readUserProfileById(context)(response.data.id)!);

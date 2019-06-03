@@ -2,7 +2,7 @@ import {ActionContext} from 'vuex';
 import {getStoreAccessors} from 'typesafe-vuex';
 
 import router from '@/router';
-import {api} from '@/helpers';
+import {apiService} from '@/services';
 import {State} from '@/store/state';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
@@ -17,7 +17,7 @@ type SpecialitiesContext = ActionContext<SpecialitiesState | any, State>;
 export const actions = {
     actionGetSpecialities: async (context: SpecialitiesContext) => {
         try {
-            const response = await api.getSpecialities();
+            const response = await apiService.getSpecialities();
             if (response) {
                 commitSetSpecialities(context, response.data);
             }
@@ -30,7 +30,7 @@ export const actions = {
             const loadingNotification = {content: 'Создание направления', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = await api.createSpeciality(payload);
+            const response = await apiService.createSpeciality(payload);
             commitSetSpeciality(context, response.data);
 
             commitRemoveNotification(context, loadingNotification);
@@ -52,7 +52,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение направления', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = await api.changeSpecialityById(
+            const response = await apiService.changeSpecialityById(
                 payload.id,
                 payload.speciality,
             );

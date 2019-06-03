@@ -1,7 +1,7 @@
 import {ActionContext} from 'vuex';
 import {getStoreAccessors} from 'typesafe-vuex';
 
-import {api} from '@/helpers';
+import {apiService} from '@/services';
 import router from '@/router';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {State} from '@/store/state';
@@ -20,7 +20,7 @@ export const actions = {
             const loadingNotification = {content: 'Создание предмета', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = await api.createSubject(payload);
+            const response = await apiService.createSubject(payload);
             commitSetSubject(context, response.data);
 
             commitRemoveNotification(context, loadingNotification);
@@ -36,7 +36,7 @@ export const actions = {
     },
     actionGetSubjects: async (context: SubjectsContext) => {
         try {
-            const response = await api.getSubjects();
+            const response = await apiService.getSubjects();
             if (response) {
                 commitSetSubjects(context, response.data);
             }
@@ -49,7 +49,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение предмета', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = await api.changeSubjectById(payload.id, payload.subject);
+            const response = await apiService.changeSubjectById(payload.id, payload.subject);
             commitSetSubject(context, response.data);
 
             commitRemoveNotification(context, loadingNotification);

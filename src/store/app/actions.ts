@@ -3,7 +3,7 @@ import {getStoreAccessors} from 'typesafe-vuex';
 import {AxiosError} from 'axios';
 
 import router from '@/router';
-import {getLocalDarkThemeUsage, saveLocalDarkThemeUsage} from '@/helpers';
+import {getLocalDarkThemeUsage, saveLocalDarkThemeUsage} from '@/services';
 import {IAppNotification} from '@/models';
 import {State} from '@/store/state';
 import {dispatchLogout} from '@/store/auth/actions';

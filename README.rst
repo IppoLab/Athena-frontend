@@ -34,7 +34,7 @@ Use following commands to work with application::
     npm install   - install app dependencies
     npm run serve - run application from dev server with auto-reloading
 
-If you need responses from api for application you can clone backend_ part and run it with ``docker``. More info in README_.
+If you need responses from apiService for application you can clone backend_ part and run it with ``docker``. More info in README_.
 
 .. _backend: https://github.com/ippolab/athena-backend
 .. _README: https://github.com/ippolab/athena-backend/blob/dev/README.rst

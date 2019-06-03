@@ -1,13 +1,12 @@
 <template>
     <loader :loading="!loaded">
         <v-container slot="content" class="fluid">
-            <v-card class="elevation-10">
-                <v-toolbar>
-                    <v-toolbar-title primary-title>
+            <v-card>
+                <v-card-title primary-title>
+                    <div class="headline primary--text">
                         <slot name="form-title"></slot>
-                    </v-toolbar-title>
-                    <v-spacer></v-spacer>
-                </v-toolbar>
+                    </div>
+                </v-card-title>
                 <v-card-text>
                     <template>
                         <v-form ref="form" lazy-validation>
@@ -16,10 +15,10 @@
 
                                     v-validate="'required'"
                                     data-vv-name="username"
-                                    data-vv-as="'имя пользователя'"
+                                    data-vv-as="'логин'"
                                     :error-messages="errors.collect('username')"
 
-                                    label="Имя пользователя"
+                                    label="Логин"
                                     type="text"
                                     required>
                             </v-text-field>
@@ -178,7 +177,7 @@
 
     import Loader from '@/components/Loader.vue';
 
-    import {userHasRole} from '@/helpers/general';
+    import {userHasRole} from '@/services/general.service';
     import {rolesRus, structValues, studentRoleName, teacherRoleName} from '@/configs/constants';
 
     import {ISubject, ListElementSubject, StudentProfileForm, TeacherProfileForm, UserProfileForm} from '@/models';

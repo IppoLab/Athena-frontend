@@ -2,7 +2,7 @@ import {getStoreAccessors} from 'typesafe-vuex';
 import {ActionContext} from 'vuex';
 
 import {State} from '@/store/state';
-import {api} from '@/helpers/api';
+import {apiService} from '@/services/api.service';
 import {ITask, ITaskInCreate, ITaskInResponse, ITaskInUpdate} from '@/models/interfaces/tasks';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {readGroupById} from '@/store/groups/getters';
@@ -12,7 +12,7 @@ import {TasksState} from './state';
 import {commitSetTask, commitSetTasks} from './mutations';
 import router from '@/router';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
-import {loaders} from '@/helpers';
+import {loaders} from '@/services';
 
 
 type TasksContext = ActionContext<TasksState | any, State>;
@@ -31,7 +31,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение задания', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = (await api.createTask(payload)).data;
+            const response = (await apiService.createTask(payload)).data;
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Задание изменено', color: 'success'});
@@ -56,7 +56,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение задания', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            await api.updateTaskById(payload.id, payload.task);
+            await apiService.updateTaskById(payload.id, payload.task);
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Задание изменено', color: 'success'});

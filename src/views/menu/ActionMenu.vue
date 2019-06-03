@@ -21,6 +21,14 @@
         <AdminMenu v-if="isAdmin"/>
         <StudentMenu v-if="isStudent"/>
         <TutorMenu v-if="iIsTutor"/>
+        <v-list-tile :to="{name: 'settings'}">
+            <v-list-tile-action>
+                <v-icon>settings</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>Настройки</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile @click.prevent="logout">
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>

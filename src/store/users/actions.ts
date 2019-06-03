@@ -2,8 +2,8 @@ import {ActionContext} from 'vuex';
 import {getStoreAccessors} from 'typesafe-vuex';
 
 import router from '@/router';
-import {userHasRole} from '@/helpers/general';
-import {api, loaders} from '@/helpers';
+import {userHasRole} from '@/services/general.service';
+import {apiService, loaders} from '@/services';
 import {studentRoleName, teacherRoleName} from '@/configs/constants';
 import {IStudentProfileInUpdate, ITeacherProfileInAPI, IUserProfileInCreate, IUserProfileInUpdate} from '@/models';
 import {State} from '@/store/state';
@@ -28,15 +28,15 @@ export const actions = {
             const loadingNotification = {content: 'Создание пользователя', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const user = (await api.createUserProfile(payload.user)).data;
+            const user = (await apiService.createUserProfile(payload.user)).data;
             if (userHasRole(user, studentRoleName)) {
-                await api.changeStudentProfileById(
+                await apiService.changeStudentProfileById(
                     user.id,
                     payload.student!,
                 );
             }
             if (userHasRole(user, teacherRoleName)) {
-                await api.changeTeacherProfileById(
+                await apiService.changeTeacherProfileById(
                     user.id,
                     payload.teacher!,
                 );
@@ -58,7 +58,7 @@ export const actions = {
     },
     actionGetUsers: async (context: UsersContext) => {
         try {
-            commitSetUserProfiles(context, (await api.getUserProfiles()).data);
+            commitSetUserProfiles(context, (await apiService.getUserProfiles()).data);
         } catch (e) {
             await dispatchCheckApiError(context, e);
         }
@@ -75,15 +75,15 @@ export const actions = {
             const loadingNotification = {content: 'Изменение пользователя', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            await api.changeUserProfileById(payload.id, payload.user);
+            await apiService.changeUserProfileById(payload.id, payload.user);
             if (userHasRole(payload.user, studentRoleName)) {
-                await api.changeStudentProfileById(
+                await apiService.changeStudentProfileById(
                     payload.id,
                     payload.student!,
                 );
             }
             if (userHasRole(payload.user, teacherRoleName)) {
-                await api.changeTeacherProfileById(
+                await apiService.changeTeacherProfileById(
                     payload.id,
                     payload.teacher!,
                 );

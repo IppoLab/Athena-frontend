@@ -1,8 +1,8 @@
 <template>
     <v-content>
-        <v-container class="fluid fill-height">
+        <v-container class="fluid">
             <v-layout class="align-center justify-center">
-                <v-flex class="xs12 md4 sm8">
+                <v-flex class="xs12 sm6 md4">
                     <v-card class="elevation-10">
                         <v-card-title primary-title>
                             <div class="headline primary--text">Профиль</div>

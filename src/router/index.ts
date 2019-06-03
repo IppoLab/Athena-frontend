@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import RouterComponent from '@/components/RouterComponent.vue';
+
 import {adminRouteGuard, authRouteGuard} from './guards';
 
 Vue.use(Router);
@@ -11,7 +13,7 @@ export default new Router({
     routes: [
         {
             path: '',
-            component: () => import('@/components/RouterComponent.vue'),
+            component: RouterComponent,
             beforeEnter: authRouteGuard,
             children: [
                 {
@@ -30,20 +32,20 @@ export default new Router({
                     component: () => import('@/views/Profile.vue'),
                 },
                 {
+                    path: 'settings',
+                    name: 'settings',
+                    component: () => import('@/views/Settings.vue'),
+                },
+                {
                     path: 'admin',
-                    component: () => import('@/components/RouterComponent.vue'),
+                    component: RouterComponent,
                     beforeEnter: adminRouteGuard,
                     redirect: 'admin/users',
                     children: [
                         {
-                            path: 'settings',
-                            name: 'settings',
-                            component: () => import('@/views/Settings.vue'),
-                        },
-                        {
                             path: 'users',
                             redirect: 'users/all',
-                            component: () => import('@/components/RouterComponent.vue'),
+                            component: RouterComponent,
                             children: [
                                 {
                                     path: 'all',
@@ -69,7 +71,7 @@ export default new Router({
                         },
                         {
                             path: 'subjects',
-                            component: () => import('@/components/RouterComponent.vue'),
+                            component: RouterComponent,
                             redirect: 'subjects/all',
                             children: [
                                 {
@@ -91,7 +93,7 @@ export default new Router({
                         },
                         {
                             path: 'specialities',
-                            component: () => import('@/components/RouterComponent.vue'),
+                            component: RouterComponent,
                             redirect: 'specialities/all',
                             children: [
                                 {
@@ -113,7 +115,7 @@ export default new Router({
                         },
                         {
                             path: 'groups',
-                            component: () => import('@/components/RouterComponent.vue'),
+                            component: RouterComponent,
                             redirect: 'groups/all',
                             children: [
                                 {
@@ -138,11 +140,16 @@ export default new Router({
                 {
                     path: 'reports',
                     redirect: 'reports/all',
-                    component: () => import('@/components/RouterComponent.vue'),
+                    component: RouterComponent,
                     children: [
                         {
-                            path: 'all',
-                            name: 'reports-all',
+                            path: 'student/all',
+                            name: 'student-reports-all',
+                            component: () => import('@/views/reports/ListReports.vue'),
+                        },
+                        {
+                            path: 'tutor/all',
+                            name: 'tutor-reports-all',
                             component: () => import('@/views/reports/ListReports.vue'),
                         },
                         {
@@ -164,12 +171,17 @@ export default new Router({
                 },
                 {
                     path: 'tasks',
-                    component: () => import('@/components/RouterComponent.vue'),
+                    component: RouterComponent,
                     redirect: 'tasks/all',
                     children: [
                         {
-                            path: 'all',
-                            name: 'tasks-all',
+                            path: 'student/all',
+                            name: 'student-tasks-all',
+                            component: () => import('@/views/tasks/ListTasks.vue'),
+                        },
+                        {
+                            path: 'tutor/all',
+                            name: 'tutor-tasks-all',
                             component: () => import('@/views/tasks/ListTasks.vue'),
                         },
                         {

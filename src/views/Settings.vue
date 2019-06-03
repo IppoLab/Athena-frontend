@@ -6,6 +6,17 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
             <v-card-text>
+                <v-toolbar-title>Базовые настройки</v-toolbar-title>
+                <v-layout>
+                    <v-card-text class="subheading mt-1">Темная тема</v-card-text>
+                    <v-spacer></v-spacer>
+                    <theme-switcher></theme-switcher>
+                </v-layout>
+            </v-card-text>
+            <span v-if="hasAdditionalSettingsAccess">
+            <v-divider></v-divider>
+                <v-card-text>
+                <v-toolbar-title>Расширенные настройки</v-toolbar-title>
                 <template>
                     <v-form lazy-validation>
                         <v-text-field
@@ -26,22 +37,29 @@
                     </v-btn>
                 </v-layout>
             </v-card-actions>
+            </span>
         </v-card>
     </v-container>
 </template>
 
 <script lang="ts">
-    import axios, {AxiosError} from 'axios';
+    import axios from 'axios';
     import {Component, Vue} from 'vue-property-decorator';
     import Loader from '@/components/Loader.vue';
     import {apiUrl} from '@/configs/env';
-    import {removeLocalApiUrl, saveLocalApiUrl, setAxiosApiUrl} from '@/helpers';
+    import {removeLocalApiUrl, saveLocalApiUrl, setAxiosApiUrl} from '@/services';
+    import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
+    import {readUserIsAdmin} from '@/store/auth/getters';
 
     @Component({
-        components: {Loader},
+        components: {Loader, ThemeSwitcher},
     })
     export default class Settings extends Vue {
         public apiUrl?: string = apiUrl;
+
+        public get hasAdditionalSettingsAccess() {
+            return readUserIsAdmin(this.$store);
+        }
 
         public reset() {
             this.apiUrl = '';

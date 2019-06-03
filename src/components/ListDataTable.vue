@@ -1,10 +1,10 @@
 <template>
     <loader :loading="!loaded">
         <div slot="content">
-            <list-table-header :buttonLink="{name: 'users-new'}" :search.sync="search"></list-table-header>
+            <list-table-header :buttonLink="creationLink" :search.sync="search"></list-table-header>
             <v-data-table
                     :headers="headers"
-                    :items="users"
+                    :items="items"
                     :pagination.sync="pagination"
                     :search="search"
                     hide-actions>
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
 
     import Loader from '@/components/Loader.vue';
     import ListTableHeader from '@/components/ListTableHeader.vue';
@@ -52,6 +52,9 @@
         },
     })
     export default class Users extends Vue {
+        @Prop({default: []}) items: any[] = [];
+        @Prop({default: ''}) public creationLink!: string;
+
         public loaded: boolean = false;
         public search: string = '';
         public pagination = {
@@ -88,13 +91,9 @@
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         }
 
-        get users() {
-            return readUsers(this.$store).map((user: IUserProfile) => ListElementUser.fromUserProfile(user));
-        }
-
         public async mounted() {
             await dispatchGetUsers(this.$store);
-            this.pagination.totalItems = this.users.length;
+            this.pagination.totalItems = this.items.length;
             this.loaded = true;
         }
     }

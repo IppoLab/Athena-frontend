@@ -5,7 +5,7 @@ import router from '@/router';
 import {State} from '@/store/state';
 
 import {ReportsState} from './state';
-import {api, loaders} from '@/helpers';
+import {apiService, loaders} from '@/services';
 import {IReportInCheck, IReportInCreate, IReportInUpdate} from '@/models';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
@@ -16,7 +16,7 @@ type ReportsContext = ActionContext<ReportsState | any, State>;
 export const actions = {
     actionRouteReportCreateOrView: async (context: ReportsContext, payload: string) => {
         try {
-            await api.getStudentReportForTask(payload);
+            await apiService.getStudentReportForTask(payload);
             await dispatchRouteReportView(context, payload);
         } catch (e) {
             await dispatchRouteReportCreate(context, payload);
@@ -36,7 +36,7 @@ export const actions = {
             const loadingNotification = {content: 'Создание отчета', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = (await api.createReport(payload)).data;
+            const response = (await apiService.createReport(payload)).data;
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Отчет создан', color: 'success'});
@@ -65,7 +65,7 @@ export const actions = {
             const loadingNotification = {content: 'Изменение отчета', showProgress: true};
             commitAddNotification(context, loadingNotification);
 
-            const response = (await api.updateReportById(payload.id, payload.report)).data;
+            const response = (await apiService.updateReportById(payload.id, payload.report)).data;
 
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, {content: 'Отчет изменен', color: 'success'});
@@ -87,7 +87,7 @@ export const actions = {
         report: IReportInCheck,
     }) => {
         try {
-            await api.checkReport(payload.id, payload.report);
+            await apiService.checkReport(payload.id, payload.report);
         } catch (e) {
             await dispatchCheckApiError(context, e);
         }

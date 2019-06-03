@@ -30,7 +30,8 @@ import {
     IUserProfileInResponse,
     IUserProfileInUpdate,
 } from '@/models';
-import {getLocalApiUrl} from '@/helpers/app';
+
+import {getLocalApiUrl} from './local-storage.service';
 
 const axiosInstance = axios.create({
     baseURL: apiUrl,
@@ -208,7 +209,7 @@ const reportsApi = {
     },
 };
 
-export const api = {
+export const apiService = {
     ...authApi,
     ...usersApi,
     ...subjectsApi,
