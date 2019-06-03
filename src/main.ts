@@ -7,10 +7,9 @@ import 'vuetify/dist/vuetify.min.css';
 import './plugins/vee-validate';
 import './plugins/vue-luxon';
 
-import store from './store';
-import router from './router';
-
 import App from './App.vue';
+import router from './router';
+import store from './store';
 
 import './configs/component-hooks';
 import './configs/register-service-worker';
@@ -19,7 +18,7 @@ import './configs/register-service-worker';
 Vue.config.productionTip = false;
 
 new Vue({
-    store,
     router,
+    store,
     render: (h) => h(App),
 }).$mount('#app');

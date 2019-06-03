@@ -1,6 +1,6 @@
 import {getStoreAccessors} from 'typesafe-vuex';
 
-import {ITask} from '@/models/interfaces/tasks';
+import {ITask} from '@/models/tasks';
 import {State} from '@/store/state';
 
 import {TasksState} from './state';

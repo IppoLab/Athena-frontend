@@ -6,9 +6,8 @@
 
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
-
-    import {readUseDarkTheme} from '@/store/app/getters';
     import {dispatchChangeDarkThemeUsage, dispatchCheckDarkThemeUsage} from '@/store/app/actions';
+    import {readUseDarkTheme} from '@/store/app/getters';
 
     @Component
     export default class ThemeSwitcher extends Vue {

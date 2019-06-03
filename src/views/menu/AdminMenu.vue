@@ -9,7 +9,7 @@
                     <v-list-tile-title>Администрирование</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'users-all'}">
+            <v-list-tile to="/admin/users/all">
                 <v-list-tile-action>
                     <v-icon>accessible_forward</v-icon>
                 </v-list-tile-action>
@@ -17,7 +17,7 @@
                     <v-list-tile-title>Пользователи</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'subjects-all'}">
+            <v-list-tile to="/admin/subjects/all">
                 <v-list-tile-action>
                     <v-icon>class</v-icon>
                 </v-list-tile-action>
@@ -25,7 +25,7 @@
                     <v-list-tile-title>Предметы</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'specialities-all'}">
+            <v-list-tile to="/admin/specialities/all">
                 <v-list-tile-action>
                     <v-icon>school</v-icon>
                 </v-list-tile-action>
@@ -33,7 +33,7 @@
                     <v-list-tile-title>Направления</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'groups-all'}">
+            <v-list-tile to="/admin/groups/all">
                 <v-list-tile-action>
                     <v-icon>people</v-icon>
                 </v-list-tile-action>
@@ -42,7 +42,7 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
-            <v-list-tile :to="{name: 'settings'}">
+            <v-list-tile to="/admin/settings">
                 <v-list-tile-action>
                     <v-icon>settings</v-icon>
                 </v-list-tile-action>
@@ -59,5 +59,10 @@
 
     @Component
     export default class AdminMenu extends Vue {
+
     }
 </script>
+
+<style scoped>
+
+</style>

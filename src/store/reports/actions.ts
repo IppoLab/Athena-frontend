@@ -10,6 +10,7 @@ import {IReportInCheck, IReportInCreate, IReportInUpdate} from '@/models';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {commitAddNotification, commitRemoveNotification} from '@/store/app/mutations';
 import {commitSetReport, commitSetReports} from '@/store/reports/mutations';
+import {reportsModule} from '@/store/reports/index';
 
 type ReportsContext = ActionContext<ReportsState | any, State>;
 
@@ -23,13 +24,13 @@ export const actions = {
         }
     },
     actionRouteReportEdit: async (context: ReportsContext, payload: string) => {
-        router.push({name: 'reports-edit', params: {id: payload}});
+        router.push({name: 'student-edit-report', params: {id: payload}});
     },
     actionRouteReportCreate: async (context: ReportsContext, payload: string) => {
-        router.push({name: 'report-new', params: {id: payload}});
+        router.push({name: 'student-new-report', params: {id: payload}});
     },
     actionRouteReportView: async (context: ReportsContext, payload: string) => {
-        router.push({name: 'report-view', params: {id: payload}});
+        router.push({name: 'student-view-report', params: {id: payload}});
     },
     actionCreateReport: async (context: ReportsContext, payload: IReportInCreate) => {
         try {

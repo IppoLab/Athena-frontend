@@ -1,4 +1,4 @@
-import {ITask} from '@/models/interfaces/tasks';
+import {ITask} from '@/models/tasks';
 
 export interface TasksState {
     tasks: ITask[];

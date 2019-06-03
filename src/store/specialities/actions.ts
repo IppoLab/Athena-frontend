@@ -42,7 +42,7 @@ export const actions = {
         }
     },
     actionRouteEditSpeciality: async (context: SpecialitiesContext, payload: string) => {
-        router.push({name: 'specialities-edit', params: {id: payload}});
+        router.push({name: 'admin-specialities-edit', params: {id: payload}});
     },
     actionChangeSpecialityById: async (
         context: SpecialitiesContext,

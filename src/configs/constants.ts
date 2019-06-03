@@ -3,12 +3,12 @@ export const studentRoleName = 'student';
 export const tutorRoleName = 'tutor';
 export const teacherRoleName = 'teacher';
 
-export const rolesRus = {
-    student: 'студент',
-    tutor: 'тьютор',
-    teacher: 'преподаватель',
-    admin: 'администратор',
-};
+export const rolesRus = [
+    [studentRoleName, 'студент'],
+    [tutorRoleName, 'тьютор'],
+    [teacherRoleName, 'преподаватель'],
+    [adminRoleName, 'администратор'],
+];
 
 export const statusRus = {
     N: 'не проверено',
@@ -16,7 +16,6 @@ export const statusRus = {
     D: 'сделано',
     F: 'исправить',
 };
-
 
 export function structKeys(s) {
     return Object.keys(s);
