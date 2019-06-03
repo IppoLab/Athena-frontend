@@ -9,7 +9,7 @@
                     <v-list-tile-title>Студент</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'tasks-all'}">
+            <v-list-tile to="/student/tasks/all">
                 <v-list-tile-action>
                     <v-icon>folder_shared</v-icon>
                 </v-list-tile-action>
@@ -17,7 +17,7 @@
                     <v-list-tile-title>Задания</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="{name: 'reports-all'}">
+            <v-list-tile to="/student/reports">
                 <v-list-tile-action>
                     <v-icon>folder_special</v-icon>
                 </v-list-tile-action>
@@ -34,5 +34,10 @@
 
     @Component
     export default class StudentMenu extends Vue {
+
     }
 </script>
+
+<style scoped>
+
+</style>

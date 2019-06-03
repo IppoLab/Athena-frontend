@@ -1,37 +1,19 @@
 <template>
     <div>
         <v-snackbar auto-height :color="currentNotificationColor" v-model="show">
-            <v-progress-circular class="ma-2" indeterminate v-show="showProgress"/>
+            <v-progress-circular class="ma-2" indeterminate v-show="showProgress"></v-progress-circular>
             {{ currentNotificationContent }}
-            <span v-if="currentNotificationActions.length">
-                <v-btn
-                        v-for="(action, i) in currentNotificationActions"
-                        :key="i"
-
-                        @click.native="action.action"
-
-                        flat>
-                    <slot>
-                        {{action.name}}
-                    </slot>
-                </v-btn>
-            </span>
-            <v-btn v-else flat @click.native="close">
-                <slot>
-                    Закрыть
-                </slot>
-            </v-btn>
+            <v-btn flat @click.native="close">Закрыть</v-btn>
         </v-snackbar>
     </div>
 </template>
-
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
 
-    import {IAppNotification, INotificationAction} from '@/models';
+    import {IAppNotification} from '@/models';
 
-    import {readFirstNotification} from '@/store/app/getters';
     import {commitRemoveNotification} from '@/store/app/mutations';
+    import {readFirstNotification} from '@/store/app/getters';
     import {dispatchRemoveNotification} from '@/store/app/actions';
 
     @Component
@@ -51,22 +33,6 @@
 
         public get currentNotificationColor() {
             return this.currentNotification && this.currentNotification.color || 'info';
-        }
-
-        public get currentNotificationActions() {
-            if (this.currentNotification && this.currentNotification.actions) {
-                return this.currentNotification.actions.map((action: INotificationAction) => {
-                    return {
-                        name: action.name,
-                        action: async () => {
-                            await action.action();
-                            await this.close();
-                        },
-                    } as INotificationAction;
-                });
-            } else {
-                return [];
-            }
         }
 
         public async hide() {

@@ -3,7 +3,7 @@ import {ActionContext} from 'vuex';
 
 import {State} from '@/store/state';
 import {api} from '@/helpers/api';
-import {ITask, ITaskInCreate, ITaskInResponse, ITaskInUpdate} from '@/models/interfaces/tasks';
+import {ITask, ITaskInCreate, ITaskInResponse, ITaskInUpdate} from '@/models/tasks';
 import {dispatchCheckApiError} from '@/store/app/actions';
 import {readGroupById} from '@/store/groups/getters';
 import {readSubjectById} from '@/store/subjects/getters';
@@ -67,10 +67,10 @@ export const actions = {
         }
     },
     actionRouteTaskEdit: async (context: TasksContext, payload: string) => {
-        router.push({name: 'tasks-edit', params: {id: payload}});
+        router.push({name: 'tutor-tasks-edit', params: {id: payload}});
     },
     actionRouteTaskView: async (context: TasksContext, payload: string) => {
-        router.push({name: 'tasks-view', params: {id: payload}});
+        router.push({name: 'student-view-task', params: {id: payload}});
     },
 };
 
