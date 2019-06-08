@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content v-if="loading">
+        <v-cfontent v-if="loading">
             <v-container fill-height>
                 <v-layout align-center justify-center>
                     <v-flex>
@@ -15,7 +15,7 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-        </v-content>
+        </v-cfontent>
         <slot v-else name="content"></slot>
     </div>
 </template>

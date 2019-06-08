@@ -33,10 +33,8 @@ module.exports = {
             }));
     },
     pwa: {
-        workboxPluginMode: 'InjectManifest',
         workboxOptions: {
-            swSrc: 'public/service-worker.js',
-
-        }
-    }
+            importScripts:['./sw-prefile.js'],
+        },
+    },
 };

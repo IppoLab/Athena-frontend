@@ -13,8 +13,12 @@ if (process.env.NODE_ENV === 'production') {
                 'For more details, visit https://goo.gl/AFskqB',
             );
         },
-        registered() {
+        registered(options: ServiceWorkerRegistration) {
             console.log('Service worker has been registered.');
+            setInterval(() => {
+                options.update();
+                console.log('Check for update');
+            }, 1000 * 60);  // each 1m
         },
         cached() {
             console.log('Content has been cached for offline use.');
@@ -24,24 +28,26 @@ if (process.env.NODE_ENV === 'production') {
         },
         updated(options: ServiceWorkerRegistration) {
             console.log('New content is available; please refresh.');
-            commitAddNotification(store, {
-                content: 'Доступно обновление', actions: [
-                    {
-                        name: 'Обновить',
-                        action: async () => {
-                            if (options.waiting) {
-                                options.waiting.postMessage({action: 'skipWaiting'});
+            setTimeout(() => {
+                commitAddNotification(store, {
+                    content: 'Доступно обновление', actions: [
+                        {
+                            name: 'Обновить',
+                            action: async () => {
+                                if (options.waiting) {
+                                    options.waiting.postMessage({action: 'skipWaiting'});
 
-                                window.location.reload();
-                            }
+                                    window.location.reload();
+                                }
+                            },
                         },
-                    },
-                    {
-                        name: 'Закрыть',
-                        action: async () => undefined,
-                    },
-                ],
-            });
+                        {
+                            name: 'Закрыть',
+                            action: async () => undefined,
+                        },
+                    ],
+                });
+            }, 1000 * 5);
         },
         offline() {
             console.log('No internet connection found. App is running in offline mode.');
