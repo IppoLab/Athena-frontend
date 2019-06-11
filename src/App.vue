@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <v-app :dark="darkTheme">
-            <Loader :loading="loggedIn === null">
+            <loader :loading="loggedIn === null">
                 <v-content slot="content">
                     <v-navigation-drawer
                             v-model="showDrawer"
@@ -23,7 +23,7 @@
                         </v-layout>
                     </v-footer>
                 </v-content>
-            </Loader>
+            </loader>
         </v-app>
     </div>
 </template>

@@ -1,65 +1,29 @@
 <template>
-    <Loader>
-        <div slot="content">
-            <ListTableHeader buttonLink="/admin/groups/create" :search.sync="search"></ListTableHeader>
-            <v-data-table
-                    :headers="headers"
-                    :items="groups"
-                    :pagination.sync="pagination"
-                    hide-actions
-                    :search="search">
-                <template slot="items" slot-scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.speciality.cipher }} {{ props.item.speciality.name }}</td>
-                    <td class="justify-center layout px-0">
-                        <v-tooltip top>
-                            <span>Изменить</span>
-                            <v-btn slot="activator" flat :to="{name: 'groups-edit', params: {id: props.item.id}}">
-                                <v-icon>edit</v-icon>
-                            </v-btn>
-                        </v-tooltip>
-                    </td>
-                </template>
-                <template slot="no-data">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Данных нет
-                    </v-alert>
-                </template>
-                <template slot="no-results">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Данных нет
-                    </v-alert>
-                </template>
-            </v-data-table>
-            <div class="text-xs-center pt-2">
-                <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-            </div>
-        </div>
-    </Loader>
+    <items-list
+            :creationLink="{name: 'groups-new'}"
+            :headers="headers"
+            :items="groups"
+            :preload="loadGroups"
+            @itemClick="routeGroup"
+    ></items-list>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+
+    import ItemsList from '@/components/ItemsList.vue';
+
     import {readGroups} from '@/store/groups/getters';
-    import {dispatchGetGroups} from '@/store/groups/actions';
-    import ListTableHeader from '@/components/ListTableHeader.vue';
-    import Loader from '@/components/Loader.vue';
+    import {dispatchGetGroups, dispatchRouteEditGroup} from '@/store/groups/actions';
+
+    import {IGroup, ListElementGroup} from '@/models';
 
     @Component({
         components: {
-            Loader,
-            ListTableHeader,
+            ItemsList,
         },
     })
     export default class ListGroups extends Vue {
-        public loaded: boolean = false;
-
-        public search: string = '';
-        public pagination = {
-            rowsPerPage: 10,
-            totalItems: 0,
-        };
-
         public headers = [
             {
                 text: 'Название',
@@ -69,29 +33,22 @@
             },
             {
                 text: 'Направление',
-                value: 'semester',
-                sortable: true,
-                align: 'left',
-            },
-            {
-                text: 'Действия',
+                value: 'speciality',
                 sortable: false,
-                align: 'center',
+                align: 'left',
             },
         ];
 
-        get pages() {
-            return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
-        }
-
         get groups() {
-            return readGroups(this.$store);
+            return readGroups(this.$store).map((group: IGroup) => ListElementGroup.fromGroup(group));
         }
 
-        public async mounted() {
+        public async loadGroups() {
             await dispatchGetGroups(this.$store);
-            this.pagination.totalItems = this.groups.length;
-            this.loaded = true;
+        }
+
+        public async routeGroup(id: string) {
+            await dispatchRouteEditGroup(this.$store, id);
         }
     }
 </script>

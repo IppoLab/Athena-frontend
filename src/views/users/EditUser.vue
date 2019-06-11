@@ -29,9 +29,14 @@
     })
     export default class EditUser extends Vue {
         public async infoPreload() {
+            const userId = this.$router.currentRoute.params.id;
+            if (userId === undefined) {
+                return;
+            }
+
             await dispatchGetGroups(this.$store);
             await dispatchGetSubjects(this.$store);
-            await dispatchGetUserById(this.$store, this.$router.currentRoute.params.id);
+            await dispatchGetUserById(this.$store, userId);
         }
 
         public async onSubmit(data) {

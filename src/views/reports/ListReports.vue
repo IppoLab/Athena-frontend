@@ -1,104 +1,67 @@
 <template>
-    <Loader :loading="!loaded">
-        <div slot="content">
-            <ListTableHeader buttonLink="/tutor/tasks/create" :search.sync="search"></ListTableHeader>
-            <v-data-table
-                    :headers="headers"
-                    :items="reports"
-                    :pagination.sync="pagination"
-                    hide-actions
-                    :search="search">
-                <template slot="items" slot-scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.status }}</td>
-                    <td class="justify-center layout px-0">
-                        <v-tooltip top>
-                            <span>Изменить</span>
-                            <v-btn slot="activator" flat
-                                   :to="{name: 'reports-view', params: {id: props.item.id}}">
-                                <v-icon>remove_red_eye</v-icon>
-                            </v-btn>
-                        </v-tooltip>
-                    </td>
-                </template>
-                <template slot="no-data">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Данных нет
-                    </v-alert>
-                </template>
-                <template slot="no-results">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Данных нет
-                    </v-alert>
-                </template>
-            </v-data-table>
-            <div class="text-xs-center pt-2">
-                <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-            </div>
-        </div>
-    </Loader>
+    <items-list
+            :creationLink="{name: 'reports-new'}"
+            :headers="headers"
+            :items="reports"
+            :preload="loadReports"
+            @itemClick="routeReport"
+    ></items-list>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import ListTableHeader from '@/components/ListTableHeader.vue';
+
+    import ItemsList from '@/components/ItemsList.vue';
+
+    import {IReport, ListElementReport} from '@/models';
+
     import {readReports} from '@/store/reports/getters';
-    import {dispatchGetReports} from '@/store/reports/actions';
-    import {IReport} from '@/models';
-    import {statusRus} from '@/configs/constants';
-    import Loader from '@/components/Loader.vue';
+    import {dispatchGetReports, dispatchRouteReportEdit} from '@/store/reports/actions';
 
     @Component({
         components: {
-            Loader,
-            ListTableHeader,
+            ItemsList,
         },
     })
     export default class ListReports extends Vue {
-        public loaded: boolean = false;
-        public search: string = '';
-        public pagination = {
-            rowsPerPage: 10,
-            totalItems: 0,
-        };
+        public get headers() {
+            const headers = [
+                {
+                    text: 'Название',
+                    value: 'name',
+                    sortable: false,
+                    align: 'left',
+                },
+                {
+                    text: 'Статус',
+                    value: 'status',
+                    sortable: false,
+                    align: 'left',
+                },
+            ];
 
-        public headers = [
-            {
-                text: 'Название',
-                value: 'name',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Статус',
-                value: 'status',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Действия',
-                sortable: false,
-                align: 'center',
-            },
-        ];
+            if (this.$route.params.type === 'tutor') {
+                headers.splice(1, 0, {
+                    text: 'Группа',
+                    value: 'studentGroup',
+                    sortable: false,
+                    align: 'left',
+                });
+            }
 
-        get pages() {
-            return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
+            return headers;
         }
 
         get reports() {
-            return readReports(this.$store).map((report: IReport) => {
-                return {
-                    ...report,
-                    status: statusRus[report.status],
-                };
-            });
+            return readReports(this.$store).map((report: IReport) => ListElementReport.fromReport(report));
         }
 
-        public async mounted() {
+        public async loadReports() {
             await dispatchGetReports(this.$store);
-            this.pagination.totalItems = this.reports.length;
-            this.loaded = true;
+        }
+
+        public async routeReport(id: string) {
+            await dispatchRouteReportEdit(this.$store, id);
         }
     }
 </script>

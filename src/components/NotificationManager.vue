@@ -8,7 +8,7 @@
                         v-for="(action, i) in currentNotificationActions"
                         :key="i"
 
-                        @click.native="action.action"
+                        @click.native="action.onItemClick"
 
                         flat>
                     <slot>

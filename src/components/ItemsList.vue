@@ -9,13 +9,16 @@
                     :search="search"
                     hide-actions>
                 <template slot="items" slot-scope="props">
-                    <tr @click="routeUser(props.item.id)">
-                        <td>{{ props.item.username }}</td>
-                        <td>{{ props.item.fullName }}</td>
-                        <td>
-                        <span v-for="role in props.item.roles" :key="role">
-                            <v-chip>{{role}}</v-chip>
-                        </span>
+                    <tr @click="onItemClick(props.item.id)">
+                        <td v-for="header of headers">
+                            <span v-if="$route.name === 'users-all' && header.value === 'roles'">
+                                <span v-for="role in props.item[header.value]" :key="role">
+                                    <v-chip>{{role}}</v-chip>
+                                </span>
+                            </span>
+                            <span v-else>
+                                {{props.item[header.value]}}
+                            </span>
                         </td>
                     </tr>
                 </template>
@@ -39,11 +42,13 @@
     import Loader from '@/components/Loader.vue';
     import ListTableHeader from '@/components/ListTableHeader.vue';
 
-    import {IUserProfile, ListElementUser} from '@/models';
-
-    import {readUsers} from '@/store/users/getters';
-    import {dispatchGetUsers, dispatchRouteEditUser} from '@/store/users/actions';
-
+    interface ITableHeader {
+        text: string;
+        value: string;
+        sortable: boolean;
+        align: string;
+        customHtml?: (item: any) => string;
+    }
 
     @Component({
         components: {
@@ -51,9 +56,11 @@
             ListTableHeader,
         },
     })
-    export default class Users extends Vue {
-        @Prop({default: []}) items: any[] = [];
+    export default class ItemsList extends Vue {
         @Prop({default: ''}) public creationLink!: string;
+        @Prop({default: () => []}) public headers!: ITableHeader[];
+        @Prop({default: async () => undefined}) public preload!: CallableFunction;
+        @Prop({default: []}) public items!: any[];
 
         public loaded: boolean = false;
         public search: string = '';
@@ -62,29 +69,8 @@
             totalItems: 0,
         };
 
-        public headers = [
-            {
-                text: 'Имя пользователя',
-                value: 'username',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'ФИО',
-                value: 'fullName',
-                sortable: false,
-                align: 'left',
-            },
-            {
-                text: 'Права',
-                value: 'roles',
-                sortable: false,
-                align: 'left',
-            },
-        ];
-
-        public async routeUser(id: string) {
-            await dispatchRouteEditUser(this.$store, id);
+        public onItemClick(id: string) {
+            this.$emit('itemClick', id);
         }
 
         get pages() {
@@ -92,7 +78,8 @@
         }
 
         public async mounted() {
-            await dispatchGetUsers(this.$store);
+            await this.preload();
+
             this.pagination.totalItems = this.items.length;
             this.loaded = true;
         }

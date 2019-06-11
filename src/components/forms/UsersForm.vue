@@ -260,7 +260,13 @@
             await this.preload();
 
             if (!this.creating) {
-                const user = readUserProfileById(this.$store)(this.$router.currentRoute.params.id);
+                const userId = this.$router.currentRoute.params.id;
+
+                if (userId === undefined) {
+                    return;
+                }
+
+                const user = readUserProfileById(this.$store)(userId);
 
                 if (user) {
                     this.userForm = UserProfileForm.fromUserProfile(user);

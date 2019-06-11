@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import RouterComponent from '@/components/RouterComponent.vue';
 
-import {adminRouteGuard, authRouteGuard} from './guards';
+import {adminRouteGuard, authRouteGuard, typeRouteGuard} from './guards';
 
 Vue.use(Router);
 
@@ -24,17 +24,17 @@ export default new Router({
                 {
                     path: 'login',
                     name: 'login',
-                    component: () => import('@/views/Login.vue'),
+                    component: () => import('@/views/common/Login.vue'),
                 },
                 {
                     path: 'profile',
                     name: 'profile',
-                    component: () => import('@/views/Profile.vue'),
+                    component: () => import('@/views/common/Profile.vue'),
                 },
                 {
                     path: 'settings',
                     name: 'settings',
-                    component: () => import('@/views/Settings.vue'),
+                    component: () => import('@/views/common/Settings.vue'),
                 },
                 {
                     path: 'admin',
@@ -143,13 +143,9 @@ export default new Router({
                     component: RouterComponent,
                     children: [
                         {
-                            path: 'student/all',
-                            name: 'student-reports-all',
-                            component: () => import('@/views/reports/ListReports.vue'),
-                        },
-                        {
-                            path: 'tutor/all',
-                            name: 'tutor-reports-all',
+                            path: ':type/all',
+                            name: 'reports-all',
+                            beforeEnter: typeRouteGuard,
                             component: () => import('@/views/reports/ListReports.vue'),
                         },
                         {
@@ -175,13 +171,9 @@ export default new Router({
                     redirect: 'tasks/all',
                     children: [
                         {
-                            path: 'student/all',
-                            name: 'student-tasks-all',
-                            component: () => import('@/views/tasks/ListTasks.vue'),
-                        },
-                        {
-                            path: 'tutor/all',
-                            name: 'tutor-tasks-all',
+                            path: ':type/all',
+                            name: 'tasks-all',
+                            beforeEnter: typeRouteGuard,
                             component: () => import('@/views/tasks/ListTasks.vue'),
                         },
                         {
@@ -206,7 +198,7 @@ export default new Router({
         {
             path: '/404',
             name: 'not-found',
-            component: () => import('@/views/NotFound.vue'),
+            component: () => import('@/views/common/NotFound.vue'),
         },
         {
             path: '*',

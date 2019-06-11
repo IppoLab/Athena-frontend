@@ -1,5 +1,5 @@
 import store from '@/store';
-import {readIsLoggedIn, readUserIsAdmin} from '@/store/auth/getters';
+import {readIsLoggedIn, readUserIsAdmin, readUserIsStudent, readUserIsTutor} from '@/store/auth/getters';
 import {dispatchCheckLoggedIn} from '@/store/auth/actions';
 
 export async function adminRouteGuard(to, from, next) {
@@ -19,5 +19,16 @@ export async function authRouteGuard(to, from, next) {
         next('/');
     } else {
         next();
+    }
+}
+
+export async function typeRouteGuard(to, from, next) {
+    const type = to.params.type;
+    if (type === 'student' && readUserIsStudent(store)) {
+        next();
+    } else if (type === 'tutor' && readUserIsTutor(store)) {
+        next();
+    } else {
+        next({name: 'not-found'});
     }
 }

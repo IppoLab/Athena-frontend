@@ -26,10 +26,10 @@ export const actions = {
         router.push({name: 'reports-edit', params: {id: payload}});
     },
     actionRouteReportCreate: async (context: ReportsContext, payload: string) => {
-        router.push({name: 'report-new', params: {id: payload}});
+        router.push({name: 'reports-new', params: {id: payload}});
     },
     actionRouteReportView: async (context: ReportsContext, payload: string) => {
-        router.push({name: 'report-view', params: {id: payload}});
+        router.push({name: 'reports-view', params: {id: payload}});
     },
     actionCreateReport: async (context: ReportsContext, payload: IReportInCreate) => {
         try {
