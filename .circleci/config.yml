@@ -55,7 +55,7 @@ jobs:
           command: |
             echo "export VUE_APP_DOMAIN_PROD=api.athena.$ATHENA_BASE_HOSTNAME" >> $BASH_ENV
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - run:
           name: install docker
           command: |
