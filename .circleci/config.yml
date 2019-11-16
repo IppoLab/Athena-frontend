@@ -106,10 +106,10 @@ workflows:
             - app-integ
           filters:
             branches:
-              only: master
+              only: revert
       - deploy-prod:
           requires:
             - build-prod
           filters:
             branches:
-              only: master
+              only: revert
